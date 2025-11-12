@@ -1,0 +1,53 @@
+/* Range component styles */
+
+.range {
+  box-sizing: border-box;
+  padding: 1rem;
+  margin: 1rem 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  max-width: 100%;
+}
+.range-summary {
+  margin-bottom: 1rem;
+}
+.range-summary > div {
+  margin-bottom: 0.25rem;
+}
+.range .recharts-responsive-container {
+  min-height: 180px;
+}
+.range .recharts-default-legend {
+  margin-bottom: 0.5rem;
+  font-size: 0.95em;
+}
+.range-summary strong {
+  color: #333;
+  font-weight: 600;
+}
+.range .error {
+  color: #d32f2f;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.partial-warning {
+  color: #b76b00;
+  margin-top: 0.5rem;
+}
+.range-info {
+  margin-top: 1rem;
+  color: #666;
+}
+@media (max-width: 600px) {
+  .range {
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+  }
+  .range h2 {
+    font-size: 1.1rem;
+  }
+}

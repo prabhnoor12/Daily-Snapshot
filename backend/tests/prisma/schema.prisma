@@ -1,0 +1,114 @@
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  role      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  notificationPreferences Json?
+  notifications Notification[]
+}
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id      String @id
+  content String @db.Text
+  shop    String
+}
+
+
+model Shop {
+  id          Int      @id @default(autoincrement())
+  shop        String   @unique
+  accessToken String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Order {
+  id      String @id
+  shop    String
+  data    String @db.Text
+  status  String
+}
+
+model Product {
+  id      String @id
+  shop    String
+  data    String @db.Text
+}
+
+
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
+
+
+model Subscription {
+  id              Int      @id @default(autoincrement())
+  shop            String
+  chargeId        Int      @unique
+  planName        String
+  price           Float
+  status          String
+  confirmationUrl String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  cancelledAt     DateTime?
+}
+
+
+model CustomerInsight {
+  id           Int      @id @default(autoincrement())
+  shop         String
+  date         DateTime
+  newCustomers Int
+  returningCustomers Int
+  createdAt    DateTime @default(now())
+}
+
+model AnalyticsLog {
+  id           Int      @id @default(autoincrement())
+  shop         String
+  userId       String
+  endpoint     String
+  requestData  String   @db.Text
+  responseData String   @db.Text
+  statusCode   Int
+  createdAt    DateTime @default(now())
+}
+
+model Customer {
+  id      String @id
+  shop    String
+  data    String @db.Text
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  message   String
+  type      String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
