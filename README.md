@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Daily Snapshot - Shopify Analytics App
 
 ## Concept
@@ -42,3 +43,6 @@ This app is built using a modern and efficient tech stack, ideal for Shopify app
 3.  The backend server calls the Shopify Admin API to get the orders and visitor data for the current day.
 4.  The data is processed (e.g., sales are summed, orders are counted).
 5.  The processed data is sent back to the frontend and displayed in the dashboard.
+=======
+# Daily-Snapshot
+>>>>>>> 5a82c728b564bf86b7b6a97574cc438c959225d5
