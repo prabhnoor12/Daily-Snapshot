@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { login } from '../../api/authApi';
+import { FaShopify } from 'react-icons/fa';
+import { FiShoppingBag, FiLogIn, FiLoader, FiAlertCircle } from 'react-icons/fi';
 import './AuthPage.css';
 
 const AuthPage: React.FC = () => {
@@ -62,22 +64,41 @@ const AuthPage: React.FC = () => {
 
   return (
     <div className="auth-page">
-      <div className="auth-card">
-        <h2 className="auth-title">Login with Shopify</h2>
-        <form onSubmit={startOAuth} className="auth-form">
-          <input
-            type="text"
-            placeholder="Enter your Shopify shop name"
-            value={shopName}
-            onChange={handleShopNameChange}
-            className="shop-input"
-            required
-          />
-          <button type="submit" className="auth-btn" disabled={loading}>
+      <div className="auth-card auth-card-flex">
+        <h2 className="auth-title auth-title-flex">
+          <FaShopify className="shopify-icon" aria-label="Shopify" /> Login with Shopify
+        </h2>
+        <form onSubmit={startOAuth} className="auth-form auth-form-fullwidth">
+          <div className="input-wrapper">
+            <input
+              type="text"
+              placeholder="Enter your Shopify shop name"
+              value={shopName}
+              onChange={handleShopNameChange}
+              className="shop-input shop-input-icon"
+              required
+              aria-label="Shopify shop name"
+            />
+            <FiShoppingBag className="input-icon" aria-label="Shop icon" />
+          </div>
+          <div className="input-helper">
+            Format: <b>your-shop-name</b> (without .myshopify.com)
+          </div>
+          <button
+            type="submit"
+            className={`auth-btn auth-btn-flex${loading ? ' auth-btn-loading' : ''}`}
+            disabled={loading}
+            aria-label="Login with Shopify"
+          >
+            {loading ? <FiLoader className="spin" size={20} /> : <FiLogIn size={20} />}
             {loading ? 'Redirecting...' : 'Login with Shopify'}
           </button>
         </form>
-        {error && <div className="auth-error">{error}</div>}
+        {error && (
+          <div className="auth-error auth-error-flex">
+            <FiAlertCircle size={20} /> {error}
+          </div>
+        )}
       </div>
     </div>
   );
