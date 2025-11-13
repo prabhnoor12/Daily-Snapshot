@@ -3,6 +3,9 @@ import prisma from "../config/prisma.js";
 import logger from '../utils/logger.js';
 import { ApiError } from '../utils/apiError.js';
 
+// Allowed notification types mirrored from Prisma enum NotificationType
+const allowedNotificationTypes = ['system','new_feature','billing','marketing','other'];
+
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const sendEmailNotification = async (userId, message, type) => {
@@ -47,11 +50,17 @@ const createNotification = async (userId, message, type) => {
       return null;
     }
 
+    // Normalize & validate type
+    let normalizedType = typeof type === 'string' ? type.toLowerCase() : 'other';
+    if (!allowedNotificationTypes.includes(normalizedType)) {
+      normalizedType = 'other';
+    }
+
     const notification = await prisma.notification.create({
       data: {
         userId,
         message,
-        type,
+        type: normalizedType,
       },
     });
     await sendEmailNotification(userId, message, type); // Send email notification

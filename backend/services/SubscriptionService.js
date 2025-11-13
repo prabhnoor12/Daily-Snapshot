@@ -56,7 +56,7 @@ export async function createSubscription(shop, body) {
 			chargeId: charge.id,
 			planName,
 			price: Number(price),
-			status: charge.status,
+			status: String(charge.status).toLowerCase(),
 			confirmationUrl: charge.confirmation_url
 		}
 	});
