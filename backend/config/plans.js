@@ -11,7 +11,7 @@ export const PRO_PLAN = {
 export function buildReturnUrl(shop) {
     const base = process.env.BILLING_RETURN_URL
         || process.env.APP_URL
-        || 'http://localhost:5173';
+        || 'https://daily-snapshot.onrender.com';
     const path = '/billing/confirm';
     const url = new URL(path, base);
     if (shop) url.searchParams.set('shop', shop);
