@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { login } from '../../api/authApi';
+import { shopifyAuth } from '../../api/authApi';
 import { FaShopify } from 'react-icons/fa';
 import { FiShoppingBag, FiLogIn, FiLoader, FiAlertCircle } from 'react-icons/fi';
 import './AuthPage.css';
@@ -18,8 +19,8 @@ const AuthPage: React.FC = () => {
     setLoading(true);
     setError('');
     try {
-      // Call backend to start OAuth process
-      const response = await login({ email: `${shopName}@shopify.com`, password: 'oauth' });
+      // Call backend to start Shopify OAuth process
+      const response = await shopifyAuth();
       // Expect backend to return either oauthUrl or an error message
       if (response.data && response.data.oauthUrl) {
         window.location.href = response.data.oauthUrl;
@@ -29,24 +30,37 @@ const AuthPage: React.FC = () => {
         setError('Failed to get OAuth URL.');
       }
     } catch (err: unknown) {
-      // Handle axios error shape and backend validation errors
+      // Enhanced error handling for axios and network errors
       if (
         typeof err === 'object' &&
         err !== null &&
         'response' in err &&
-        typeof (err as { response?: unknown }).response === 'object' &&
-        (err as { response?: { data?: { message?: string; code?: number } } }).response &&
-        'data' in (err as { response: { data?: unknown } }).response
+        typeof (err as { response?: unknown }).response === 'object'
       ) {
-        const response = (err as { response: { data?: { message?: string; code?: number } } }).response;
-        // Show backend error message, including validation errors
-        if (response.data?.message) {
-          setError(response.data.message);
-        } else if (response.data?.code === 400) {
+        // Backend responded with error
+        const response = (err as { response: { status?: number; data?: { message?: string } } }).response;
+        const status = response.status;
+        const data = response.data;
+        if (data?.message) {
+          setError(data.message);
+        } else if (status === 400) {
           setError('Invalid shop domain. Please enter a valid Shopify shop name.');
+        } else if (status === 401) {
+          setError('Unauthorized. Please check your credentials.');
+        } else if (status === 429) {
+          setError('Too many requests. Please wait and try again.');
+        } else if (status && status >= 500) {
+          setError('Server error. Please try again later.');
         } else {
           setError('Authentication failed.');
         }
+      } else if (
+        typeof err === 'object' &&
+        err !== null &&
+        'code' in err &&
+        (err as { code?: string }).code === 'ECONNABORTED'
+      ) {
+        setError('Request timed out. Please check your connection and try again.');
       } else if (
         typeof err === 'object' &&
         err !== null &&
@@ -54,6 +68,8 @@ const AuthPage: React.FC = () => {
         typeof (err as { message?: string }).message === 'string'
       ) {
         setError((err as { message: string }).message);
+      } else if (typeof err === 'string') {
+        setError(err);
       } else {
         setError('Network error. Please try again.');
       }

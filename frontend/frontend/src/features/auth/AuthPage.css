@@ -47,38 +47,52 @@
 .auth-form-fullwidth {
 	width: 100%;
 }
+
 .input-wrapper {
 	position: relative;
 	margin-bottom: 8px;
+	width: 100%;
 }
+
 .shop-input-icon {
-	padding: 10px 36px 10px 40px;
+	padding: 10px 16px 10px 44px; /* left padding increased for icon */
 	border-radius: 8px;
 	border: 1px solid #e0e0e0;
 	font-size: 16px;
 	width: 100%;
+	box-sizing: border-box;
 }
+
+
+.input-wrapper {
+	position: relative;
+	margin-bottom: 8px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+}
+
+.shop-input-icon {
+	padding: 10px 16px 10px 48px; /* further increased left padding for icon */
+	border-radius: 8px;
+	border: 1px solid #e0e0e0;
+	font-size: 16px;
+	width: 100%;
+	box-sizing: border-box;
+	background: #fff;
+}
+
 .input-icon {
 	position: absolute;
-	left: 12px;
+	left: 20px;
 	top: 50%;
 	transform: translateY(-50%);
 	color: #96bf48;
-	font-size: 20px;
+	font-size: 24px;
+	pointer-events: none;
+	z-index: 2;
+	background: transparent;
 }
-.input-helper {
-	font-size: 12px;
-	color: #888;
-	margin-bottom: 16px;
-	text-align: left;
-	width: 100%;
-}
-.auth-btn-flex {
-	width: 100%;
-	padding: 10px 0;
-	border-radius: 8px;
-	background: #96bf48;
-	color: #fff;
 	font-weight: 600;
 	font-size: 16px;
 	border: none;
