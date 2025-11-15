@@ -2,15 +2,15 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 
-class SubscriptionBase(BaseModel):
+class SessionBase(BaseModel):
 	user_id: int
-	plan: str
-	is_active: bool
+	session_token: str
+	expires_at: datetime
 
-class SubscriptionCreate(SubscriptionBase):
+class SessionCreate(SessionBase):
 	pass
 
-class Subscription(SubscriptionBase):
+class Session(SessionBase):
 	id: int
 	created_at: datetime
 
