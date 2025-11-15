@@ -13,19 +13,28 @@
 
 ## Core Features
 
+
 The app focuses on simplicity and immediate value. The dashboard displays:
 
 **Today's Sales:** Total revenue for the day so far.
-
 1. **Today's Orders:** Total number of orders placed.
 2. **Average Order Value (AOV):** Calculated as `Today's Sales / Today's Orders`.
 3. **Live Visitors:** Number of visitors currently on the site (or in the last 5 minutes).
 4. **Top Selling Product of the Day:** The product that has generated the most revenue today.
 
-### Future Features (Potential)
+## Premium Features ($20/month)
 
-* **Simple Comparison:** A subtle comparison to the previous day's performance at the same time (e.g., "Today's Sales are up 15% from yesterday").
-* **Historical Mini-Charts:** Small charts showing the trend for each metric over the past 7 days.
+These features provide actionable insights and convenience, justifying the subscription price:
+
+1. **Day-over-Day Performance:** See today’s sales, orders, and visitors compared to yesterday.
+2. **7-Day Trend Charts:** Simple line charts for sales, orders, and visitors over the past week.
+3. **Top Products of the Day:** List the top 3 selling products with sales and order counts.
+4. **Order Status Breakdown:** Display counts of fulfilled, pending, and cancelled orders for today.
+5. **Real-Time Visitor Count:** Show how many visitors are currently active or were active in the last 5 minutes.
+6. **Average Order Value (AOV):** Calculate and display today’s AOV.
+7. **Quick Export:** Export today’s snapshot as a PDF or CSV.
+8. **Customizable Dashboard:** Choose which metrics to display.
+9. **Basic Alerts:** Get notified when sales hit a daily goal or when inventory is low for top products.
 
 ## Tech Stack
 
