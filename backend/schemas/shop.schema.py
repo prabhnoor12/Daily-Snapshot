@@ -15,14 +15,3 @@ class Shop(ShopBase):
 
 	class Config:
 		orm_mode = True
-from marshmallow import Schema, fields
-
-class ShopSchema(Schema):
-	id = fields.Int(dump_only=True)
-	shop_id = fields.Str(required=True)
-	name = fields.Str(required=True)
-	email = fields.Email(required=True)
-	access_token = fields.Str(required=True)
-	domain = fields.Str(required=True)
-	created_at = fields.DateTime(dump_only=True)
-	updated_at = fields.DateTime(dump_only=True)

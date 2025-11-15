@@ -3,9 +3,88 @@ import hashlib
 import hmac
 import secrets
 import requests
-from ..config.shopify import SHOPIFY_API_KEY, SHOPIFY_API_SECRET, SHOPIFY_SCOPES, SHOPIFY_REDIRECT_URI, SHOPIFY_API_VERSION
+import datetime
 from urllib.parse import urlencode
 from flask import redirect
+from passlib.context import CryptContext
+from ..crud.user_crud import get_user_by_email, get_password_hash, create_user, update_user
+from ..utils.jwt_utils import encode_jwt, decode_jwt, verify_jwt, refresh_jwt_token
+from ..utils.error_handling import AuthError
+from ..utils.apiResponse import success_response
+from ..middleware.logger import logger
+from ..utils.validaion import is_email, is_non_empty_string
+from ..config.shopify import SHOPIFY_API_KEY, SHOPIFY_API_SECRET, SHOPIFY_SCOPES, SHOPIFY_REDIRECT_URI, SHOPIFY_API_VERSION
+
+def login(email: str, password: str) -> dict:
+	if not is_email(email) or not is_non_empty_string(password):
+		logger.error(f"Login failed: Invalid input for email {email}")
+		raise AuthError("Invalid email or password format.")
+	from ..database import SessionLocal
+	db = SessionLocal()
+	try:
+		user = get_user_by_email(db, email)
+		if not user or not user.hashed_password:
+			logger.warning(f"Login failed: User not found {email}")
+			raise AuthError("Invalid credentials.")
+		pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+		if not pwd_context.verify(password, user.hashed_password):
+			logger.warning(f"Login failed: Incorrect password for {email}")
+			raise AuthError("Invalid credentials.")
+		token = encode_jwt({"user_id": user.id, "email": user.email}, expires_in=3600)
+		logger.info(f"User logged in: {email}")
+		return success_response({"token": token, "user": {"id": user.id, "email": user.email}})
+	finally:
+		db.close()
+
+def logout(token: str) -> dict:
+	# For stateless JWT, logout is client-side; optionally blacklist token (not implemented here)
+	logger.info(f"User logged out: token {token}")
+	return success_response(message="Logged out successfully.")
+
+def refresh_token(token: str) -> dict:
+	new_token = refresh_jwt_token(token)
+	if not new_token:
+		logger.error("Token refresh failed: Invalid or expired token.")
+		raise AuthError("Invalid or expired token.")
+	logger.info("Token refreshed.")
+	return success_response({"token": new_token})
+
+def reset_password(email: str, new_password: str) -> dict:
+	if not is_email(email) or not is_non_empty_string(new_password):
+		logger.error(f"Password reset failed: Invalid input for email {email}")
+		raise AuthError("Invalid email or password format.")
+	from ..database import SessionLocal
+	db = SessionLocal()
+	try:
+		user = get_user_by_email(db, email)
+		if not user:
+			logger.warning(f"Password reset failed: User not found {email}")
+			raise AuthError("User not found.")
+		hashed = get_password_hash(new_password)
+		update_user(db, user.id, {"password": new_password})
+		logger.info(f"Password reset for user: {email}")
+		return success_response(message="Password reset successful.")
+	finally:
+		db.close()
+
+def log_user_activity(user_id: int, activity: str) -> None:
+	logger.info(f"User Activity: user_id={user_id}, activity={activity}, timestamp={datetime.datetime.utcnow().isoformat()}Z")
+
+def is_token_expired(token: str) -> bool:
+	payload = decode_jwt(token)
+	if not payload:
+		return True
+	exp = payload.get("exp")
+	if not exp:
+		return True
+	if isinstance(exp, datetime.datetime):
+		return exp < datetime.datetime.utcnow()
+	# If exp is timestamp
+	try:
+		exp_dt = datetime.datetime.utcfromtimestamp(exp)
+		return exp_dt < datetime.datetime.utcnow()
+	except Exception:
+		return True
 
 def generate_state():
 	return secrets.token_urlsafe(16)
