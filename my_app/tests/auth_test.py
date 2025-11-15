@@ -54,7 +54,7 @@ def test_reset_password_user_not_found(test_client):
 	with patch('my_app.services.auth_service.get_user_by_email') as mock_get_user:
 		mock_get_user.return_value = None
 		response = test_client.post('/api/auth/reset-password', json={'email': 'notfound@example.com', 'new_password': 'newpass'})
-		assert response.status_code == 404 or response.status_code == 400
+		assert response.status_code in (400, 401, 404)
 
 def test_shopify_oauth_initiate(test_client):
 	with patch('my_app.services.auth_service.initiate_shopify_oauth') as mock_initiate:

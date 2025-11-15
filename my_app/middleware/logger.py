@@ -39,7 +39,8 @@ logger.addHandler(handler)
 
 # Middleware for logging requests and responses with correlation/request IDs
 def log_request():
-    g.start_time = datetime.utcnow()
+    import datetime
+    g.start_time = datetime.datetime.now(datetime.UTC)
     g.request_id = request.headers.get('X-Request-ID') or str(uuid.uuid4())
     masked_args = mask_sensitive(request.args.to_dict())
     masked_json = mask_sensitive(request.get_json(silent=True) or {})
@@ -59,7 +60,8 @@ def log_request():
     )
 
 def log_response(response):
-    duration = (datetime.utcnow() - g.start_time).total_seconds() if hasattr(g, 'start_time') else None
+    import datetime
+    duration = (datetime.datetime.now(datetime.UTC) - g.start_time).total_seconds() if hasattr(g, 'start_time') else None
     logger.info(
         f"Response",
         extra={

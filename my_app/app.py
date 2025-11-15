@@ -9,8 +9,8 @@ from my_app.api.subscriptionApi import subscription_bp
 from my_app.api.userApi import user_bp
 
 # Middleware and error handling
-from middleware.logger import log_request, log_response, log_error
-from utils.error_handling import register_error_handlers
+from my_app.middleware.logger import log_request, log_response, log_error
+from my_app.utils.error_handling import register_error_handlers
 
 app = Flask(__name__)
 

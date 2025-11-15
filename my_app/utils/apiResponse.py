@@ -21,11 +21,12 @@ def localize(message, locale=None):
 
 
 def success_response(data=None, message="Success", status_code=200, metadata=None, headers=None, locale=None):
+    import datetime
     response = {
         "success": True,
         "message": localize(message, locale),
         "data": mask_sensitive(data),
-        "timestamp": datetime.utcnow().isoformat() + 'Z',
+        "timestamp": datetime.datetime.now(datetime.UTC).isoformat() + 'Z',
         "metadata": metadata or {}
     }
     logger.info(
