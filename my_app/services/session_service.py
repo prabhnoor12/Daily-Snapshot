@@ -1,9 +1,9 @@
 
 import datetime
 from flask import request
-from ..crud.session_crud import get_session_by_token, get_sessions_by_user, update_session, delete_session
-from ..database import SessionLocal
-from ..middleware.logger import logger
+from my_app.crud.session_crud import get_session_by_token, get_sessions_by_user, update_session, delete_session
+from my_app.database import SessionLocal
+from my_app.middleware.logger import logger
 
 # Activity log storage (simple in-memory, replace with DB for production)
 session_activity_log = []

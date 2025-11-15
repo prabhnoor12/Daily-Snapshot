@@ -2,7 +2,7 @@ from ..crud.setting_crud import (
 	create_setting, get_settings_by_user, get_setting_by_key, update_setting, delete_setting
 )
 from ..database import SessionLocal
-from ..middleware.logger import logger
+from my_app.middleware.logger import logger
 
 # Example default settings
 DEFAULT_SETTINGS = {

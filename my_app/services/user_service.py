@@ -1,9 +1,9 @@
-from ..crud.user_crud import (
+from my_app.crud.user_crud import (
 	create_user, get_user_by_id, get_user_by_email,
 	update_user, delete_user
 )
 from ..database import SessionLocal
-from ..middleware.logger import logger
+from my_app.middleware.logger import logger
 import secrets
 import datetime
 

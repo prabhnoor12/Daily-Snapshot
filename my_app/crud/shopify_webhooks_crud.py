@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from ..models.shopify_webhook.model import ShopifyWebhook
-from ..schemas.shopify_webhook.schema import ShopifyWebhookCreate
+from my_app.models.shopify_webhook_model import ShopifyWebhook
+from my_app.schemas.shopify_webhook_schema import ShopifyWebhookCreate
 from typing import Optional, List
 
 def create_webhook(db: Session, webhook_data: dict) -> ShopifyWebhook:

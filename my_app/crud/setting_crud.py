@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from typing import Optional, List
-from ..models.setting.model import Setting
-from ..schemas.setting.schema import SettingCreate, Setting as SettingSchema
+from my_app.models.setting_model import Setting
+from my_app.schemas.setting_schema import SettingCreate, Setting as SettingSchema
 
 def create_setting(db: Session, setting: SettingCreate) -> Setting:
 	db_setting = Setting(

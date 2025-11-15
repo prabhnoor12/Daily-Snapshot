@@ -2,7 +2,7 @@
 
 from flask import jsonify, make_response, request
 from datetime import datetime
-from middleware.logger import logger
+from my_app.middleware.logger import logger
 
 # Helper to mask sensitive data
 def mask_sensitive(data):

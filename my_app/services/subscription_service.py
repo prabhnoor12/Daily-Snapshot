@@ -3,7 +3,7 @@ from ..crud.subscription_crud import (
 	update_subscription, delete_subscription
 )
 from ..database import SessionLocal
-from ..middleware.logger import logger
+from my_app.middleware.logger import logger
 import datetime
 
 

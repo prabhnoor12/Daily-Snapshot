@@ -7,13 +7,13 @@ import datetime
 from urllib.parse import urlencode
 from flask import redirect
 from passlib.context import CryptContext
-from ..crud.user_crud import get_user_by_email, get_password_hash, create_user, update_user
-from ..utils.jwt_utils import encode_jwt, decode_jwt, verify_jwt, refresh_jwt_token
-from ..utils.error_handling import AuthError
-from ..utils.apiResponse import success_response
-from ..middleware.logger import logger
-from ..utils.validaion import is_email, is_non_empty_string
-from ..config.shopify import SHOPIFY_API_KEY, SHOPIFY_API_SECRET, SHOPIFY_SCOPES, SHOPIFY_REDIRECT_URI, SHOPIFY_API_VERSION
+from my_app.crud.user_crud import get_user_by_email, get_password_hash, create_user, update_user
+from my_app.utils.jwt_utils import encode_jwt, decode_jwt, verify_jwt, refresh_jwt_token
+from my_app.utils.error_handling import AuthError
+from my_app.utils.apiResponse import success_response
+from my_app.middleware.logger import logger
+from my_app.utils.validaion import is_email, is_non_empty_string
+from my_app.config.shopify import SHOPIFY_API_KEY, SHOPIFY_API_SECRET, SHOPIFY_SCOPES, SHOPIFY_REDIRECT_URI, SHOPIFY_API_VERSION
 
 def login(email: str, password: str) -> dict:
 	if not is_email(email) or not is_non_empty_string(password):

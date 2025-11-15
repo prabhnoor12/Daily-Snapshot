@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
-from ..models.user.model import User
-from ..schemas.user.schema import UserCreate, User
+from my_app.models.user_model import User
+from my_app.schemas.user_schema import UserCreate, User
 from sqlalchemy.exc import IntegrityError
 from typing import Optional
 
@@ -52,40 +52,4 @@ def delete_user(db: Session, user_id: int) -> bool:
     db.delete(user)
     db.commit()
     return True
-# user_crud.py
-"""
-CRUD operations for User model
-"""
-from models.user.model import User
-from sqlalchemy.orm import Session
 
-# Create a new user
-def create_user(db: Session, user_data: dict) -> User:
-    user = User(**user_data)
-    db.add(user)
-    db.commit()
-    db.refresh(user)
-    return user
-
-# Get a user by ID
-def get_user(db: Session, user_id: int) -> User:
-    return db.query(User).filter(User.id == user_id).first()
-
-# Update a user
-def update_user(db: Session, user_id: int, update_data: dict) -> User:
-    user = db.query(User).filter(User.id == user_id).first()
-    if user:
-        for key, value in update_data.items():
-            setattr(user, key, value)
-        db.commit()
-        db.refresh(user)
-    return user
-
-# Delete a user
-def delete_user(db: Session, user_id: int) -> bool:
-    user = db.query(User).filter(User.id == user_id).first()
-    if user:
-        db.delete(user)
-        db.commit()
-        return True
-    return False

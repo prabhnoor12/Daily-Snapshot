@@ -3,15 +3,15 @@
 Business logic for analytics operations. Data access is delegated to analytics CRUD and other modules.
 """
 
-from ..crud.analytics_crud import (
+from my_app.crud.analytics_crud import (
 	get_daily_analytics_for_shop_and_date,
 	get_daily_analytics_for_shop
 )
-from ..crud.shop_crud import get_shop
+from my_app.crud.shop_crud import get_shop
 from ..database import SessionLocal
-from ..utils.apiResponse import success_response, error_response
-from ..utils.validaion import is_non_empty_string
-from ..middleware.logger import logger
+from my_app.utils.apiResponse import success_response, error_response
+from my_app.utils.validaion import is_non_empty_string
+from my_app.middleware.logger import logger
 from datetime import datetime, timedelta
 import csv
 import io

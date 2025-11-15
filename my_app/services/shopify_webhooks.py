@@ -1,10 +1,10 @@
 import hmac
 import hashlib
-from ..schemas.shopify_webhook.schema import ShopifyWebhookCreate
-from ..crud.shopify_webhooks_crud import create_webhook, update_webhook
-from ..config.shopify import SHOPIFY_API_SECRET
+from my_app.schemas.shopify_webhook_schema import ShopifyWebhookCreate
+from  my_app.crud.shopify_webhooks_crud import create_webhook, update_webhook
+from my_app.config.shopify import SHOPIFY_API_SECRET
 from pydantic import ValidationError
-from ..middleware.logger import logger
+from my_app.middleware.logger import logger
 
 def verify_shopify_webhook(request_headers, request_data) -> bool:
 	"""

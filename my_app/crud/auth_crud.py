@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from typing import Optional, List
-from ..models.auth.model import RefreshToken, PasswordResetToken, LoginHistory
-from ..schemas.auth.schema import RefreshTokenCreate, PasswordResetTokenCreate, LoginHistoryCreate
+from ..models.auth_model import RefreshToken, PasswordResetToken, LoginHistory
+from ..schemas.auth_schema import RefreshTokenCreate, PasswordResetTokenCreate, LoginHistoryCreate
 from datetime import datetime
 
 def create_refresh_token(db: Session, token_data: RefreshTokenCreate) -> RefreshToken:

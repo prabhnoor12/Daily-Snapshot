@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from typing import Optional, List
-from ..models.session.model import Session as SessionModel
-from ..schemas.session.schema import SessionCreate, Session as SessionSchema
+from my_app.models.session_model import Session as SessionModel
+from my_app.schemas.session_schema import SessionCreate, Session as SessionSchema
 from datetime import datetime, timedelta
 import secrets
 
@@ -51,40 +51,3 @@ def delete_session(db: Session, session_id: int) -> bool:
     db.delete(session)
     db.commit()
     return True
-# session_crud.py
-"""
-CRUD operations for Session model
-"""
-from models.session.model import Session as SessionModel
-from sqlalchemy.orm import Session
-
-# Create a new session
-def create_session(db: Session, session_data: dict) -> SessionModel:
-    session = SessionModel(**session_data)
-    db.add(session)
-    db.commit()
-    db.refresh(session)
-    return session
-
-# Get a session by ID
-def get_session(db: Session, session_id: int) -> SessionModel:
-    return db.query(SessionModel).filter(SessionModel.id == session_id).first()
-
-# Update a session
-def update_session(db: Session, session_id: int, update_data: dict) -> SessionModel:
-    session = db.query(SessionModel).filter(SessionModel.id == session_id).first()
-    if session:
-        for key, value in update_data.items():
-            setattr(session, key, value)
-        db.commit()
-        db.refresh(session)
-    return session
-
-# Delete a session
-def delete_session(db: Session, session_id: int) -> bool:
-    session = db.query(SessionModel).filter(SessionModel.id == session_id).first()
-    if session:
-        db.delete(session)
-        db.commit()
-        return True
-    return False

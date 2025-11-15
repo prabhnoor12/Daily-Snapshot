@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models.shop.model import Shop
+from my_app.models.shop_model import Shop
 
 def create_shop(db: Session, shop_data: dict) -> Shop:
     shop = Shop(**shop_data)
