@@ -3,6 +3,7 @@ from typing import Optional
 from datetime import datetime
 
 class ShopifyWebhookBase(BaseModel):
+    shop_id: Optional[int] = None
     shop_domain: str
     event_type: str
     payload: str
