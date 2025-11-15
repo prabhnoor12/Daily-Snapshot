@@ -97,8 +97,10 @@ const AuthPage: React.FC = () => {
             />
             <FiShoppingBag className="input-icon" aria-label="Shop icon" />
           </div>
-          <div className="input-helper">
-            Format: <b>your-shop-name</b> (without .myshopify.com)
+          <div className="input-helper input-helper-prominent">
+            <span className="input-helper-label">Format:</span>
+            <span className="input-helper-shop"> <b>your-shop-name</b></span>
+            <span className="input-helper-note"> (do not include <b>.myshopify.com</b>)</span>
           </div>
           <button
             type="submit"
