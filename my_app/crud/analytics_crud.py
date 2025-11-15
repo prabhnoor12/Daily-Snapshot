@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from ..models.analytics.model import DailyAnalytics
-from ..schemas.analytics.schema import DailyAnalyticsCreate
+from my_app.models.analytics_model import DailyAnalytics
+from my_app.schemas.analytics_schema import DailyAnalyticsCreate
 from typing import Optional, List
 
 def create_daily_analytics(db: Session, analytics_data: dict) -> DailyAnalytics:

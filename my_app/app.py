@@ -1,12 +1,12 @@
 from flask import Flask, jsonify
 
 # Blueprints
-from api.analyticsApi import analytics_bp
-from api.authApi import auth_bp
-from api.settingApi import setting_bp
-from api.shopifywebhookApi import shopify_webhook_bp
-from api.subscriptionApi import subscription_bp
-from api.userApi import user_bp
+from my_app.api.analyticsApi import analytics_bp
+from my_app.api.authApi import auth_bp
+from my_app.api.settingApi import setting_bp
+from my_app.api.shopifywebhookApi import shopify_webhook_bp
+from my_app.api.subscriptionApi import subscription_bp
+from my_app.api.userApi import user_bp
 
 # Middleware and error handling
 from middleware.logger import log_request, log_response, log_error
