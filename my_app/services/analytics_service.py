@@ -12,7 +12,7 @@ from ..database import SessionLocal
 from my_app.utils.apiResponse import success_response, error_response
 from my_app.utils.validaion import is_non_empty_string
 from my_app.middleware.logger import logger
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import csv
 import io
 
@@ -29,7 +29,7 @@ def get_day_over_day_performance(shop_id):
 		return error_response("Invalid shop_id", status_code=400)
 	db = SessionLocal()
 	try:
-		today = datetime.utcnow().date()
+		today = datetime.now(timezone.utc).date()
 		yesterday = today - timedelta(days=1)
 		today_data = get_daily_analytics_for_shop_and_date(db, shop_id, today)
 		yesterday_data = get_daily_analytics_for_shop_and_date(db, shop_id, yesterday)
@@ -93,7 +93,7 @@ def get_top_products_of_day(shop_id, top_n=3):
 		return error_response("Invalid shop_id", status_code=400)
 	db = SessionLocal()
 	try:
-		today = datetime.utcnow().date()
+		today = datetime.now(timezone.utc).date()
 		today_data = get_daily_analytics_for_shop_and_date(db, shop_id, today)
 		top_products = []
 		if today_data and today_data.top_product:
@@ -143,7 +143,7 @@ def get_real_time_visitor_count(shop_id):
 		return error_response("Invalid shop_id", status_code=400)
 	db = SessionLocal()
 	try:
-		today = datetime.utcnow().date()
+		today = datetime.now(timezone.utc).date()
 		today_data = get_daily_analytics_for_shop_and_date(db, shop_id, today)
 		visitors = today_data.live_visitors if today_data else 0
 		logger.info(f"Real-Time Visitor Count fetched for shop_id {shop_id}")
@@ -165,7 +165,7 @@ def get_average_order_value(shop_id):
 		return error_response("Invalid shop_id", status_code=400)
 	db = SessionLocal()
 	try:
-		today = datetime.utcnow().date()
+		today = datetime.now(timezone.utc).date()
 		today_data = get_daily_analytics_for_shop_and_date(db, shop_id, today)
 		aov = today_data.aov if today_data else 0
 		logger.info(f"AOV fetched for shop_id {shop_id}")
@@ -188,7 +188,7 @@ def export_daily_snapshot(shop_id, format='csv'):
 		return error_response("Invalid shop_id", status_code=400)
 	db = SessionLocal()
 	try:
-		today = datetime.utcnow().date()
+		today = datetime.now(timezone.utc).date()
 		today_data = get_daily_analytics_for_shop_and_date(db, shop_id, today)
 		if not today_data:
 			logger.warning(f"No analytics data for today for shop_id {shop_id}")
@@ -226,7 +226,7 @@ def get_customizable_dashboard_metrics(shop_id, selected_metrics=None):
 		selected_metrics = ["sales", "orders", "aov", "live_visitors"]
 	db = SessionLocal()
 	try:
-		today = datetime.utcnow().date()
+		today = datetime.now(timezone.utc).date()
 		today_data = get_daily_analytics_for_shop_and_date(db, shop_id, today)
 		if not today_data:
 			logger.warning(f"No analytics data for today for shop_id {shop_id}")
@@ -252,7 +252,7 @@ def check_basic_alerts(shop_id, sales_goal=1000, inventory_threshold=10):
 		return error_response("Invalid shop_id", status_code=400)
 	db = SessionLocal()
 	try:
-		today = datetime.utcnow().date()
+		today = datetime.now(timezone.utc).date()
 		today_data = get_daily_analytics_for_shop_and_date(db, shop_id, today)
 		alerts = []
 		if today_data:
@@ -281,7 +281,7 @@ def get_mobile_dashboard_data(shop_id):
 		return error_response("Invalid shop_id", status_code=400)
 	db = SessionLocal()
 	try:
-		today = datetime.utcnow().date()
+		today = datetime.now(timezone.utc).date()
 		today_data = get_daily_analytics_for_shop_and_date(db, shop_id, today)
 		if not today_data:
 			logger.warning(f"No analytics data for today for shop_id {shop_id}")

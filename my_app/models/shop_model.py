@@ -1,8 +1,7 @@
-from sqlalchemy import Column, Integer, String, DateTime
-from sqlalchemy.orm import declarative_base
-import datetime
 
-Base = declarative_base()
+from sqlalchemy import Column, Integer, String, DateTime
+import datetime
+from my_app.database import Base
 
 class Shop(Base):
 	__tablename__ = 'shops'

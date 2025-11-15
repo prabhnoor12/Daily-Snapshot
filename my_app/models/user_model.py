@@ -13,3 +13,4 @@ class User(Base):
 	created_at = Column(DateTime, default=datetime.utcnow)
 
 	sessions = relationship("Session", back_populates="user")
+	settings = relationship("Setting", back_populates="user")

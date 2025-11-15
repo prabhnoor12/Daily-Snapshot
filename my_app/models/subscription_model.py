@@ -1,8 +1,7 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Boolean
-from sqlalchemy.orm import declarative_base
-import datetime
 
-Base = declarative_base()
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Boolean
+import datetime
+from my_app.database import Base
 
 class Subscription(Base):
     __tablename__ = 'subscriptions'

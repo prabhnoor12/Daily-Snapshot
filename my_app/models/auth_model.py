@@ -1,7 +1,8 @@
+
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from ..database import Base
+from my_app.database import Base
 
 class RefreshToken(Base):
     __tablename__ = "refresh_tokens"

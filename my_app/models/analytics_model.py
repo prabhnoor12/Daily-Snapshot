@@ -1,9 +1,7 @@
 
 from sqlalchemy import Column, Integer, String, DateTime, Float, ForeignKey
-from sqlalchemy.orm import declarative_base
 import datetime
-
-Base = declarative_base()
+from my_app.database import Base
 
 class DailyAnalytics(Base):
     __tablename__ = 'daily_analytics'
