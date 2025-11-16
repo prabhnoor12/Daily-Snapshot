@@ -13,3 +13,6 @@ class Subscription(Base):
     start_date = Column(DateTime, default=datetime.datetime.utcnow)
     end_date = Column(DateTime, nullable=True)
     last_charged = Column(DateTime, nullable=True)
+    status = Column(String, default="active")
+    payment_status = Column(String, default="pending")
+    grace_end = Column(DateTime, nullable=True)

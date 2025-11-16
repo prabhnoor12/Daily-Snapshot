@@ -107,10 +107,10 @@ def handle_expiry(subscription_id, notify_user=True):
 	db = SessionLocal()
 	try:
 		sub = get_subscription_by_id(db, subscription_id)
-		if sub and sub.end_date < datetime.date.today():
+		if sub and sub.end_date.date() < datetime.date.today():
 			# Enter grace period
 			grace_days = getattr(sub, "grace_days", GRACE_PERIOD_DAYS)
-			grace_end = sub.end_date + datetime.timedelta(days=grace_days)
+			grace_end = datetime.date.today() + datetime.timedelta(days=grace_days)
 			update_subscription(db, subscription_id, {"status": "grace", "grace_end": grace_end})
 			logger.info(f"Subscription {subscription_id} expired, grace period until {grace_end}")
 			if notify_user:
@@ -144,7 +144,14 @@ def is_in_grace_period(subscription_id, notify_user=True):
 	try:
 		sub = get_subscription_by_id(db, subscription_id)
 		if sub and getattr(sub, "status", None) == "grace":
-			in_grace = datetime.date.today() <= getattr(sub, "grace_end", sub.end_date)
+			grace_end = getattr(sub, "grace_end", None)
+			if grace_end:
+				# Ensure grace_end is a date for comparison
+				if isinstance(grace_end, datetime.datetime):
+					grace_end = grace_end.date()
+				in_grace = datetime.date.today() <= grace_end
+			else:
+				in_grace = False
 			if in_grace and notify_user:
 				# send_user_notification(sub.user_id, "You are in a grace period. Some features may be limited.")
 				logger.info(f"User {sub.user_id} notified of grace period.")

@@ -1,5 +1,4 @@
 import pytest
-
 from my_app.database import Base, engine
 # Import all models so they are registered with Base
 from my_app.models.shop_model import Shop

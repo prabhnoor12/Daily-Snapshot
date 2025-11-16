@@ -34,7 +34,7 @@ def suspend_user(user_id: int, reason: str = None) -> bool:
 		if not user:
 			logger.warning(f"User not found for suspension: {user_id}")
 			return False
-		update_user(db, user_id, {"status": "suspended", "suspend_reason": reason, "suspended_at": datetime.datetime.utcnow()})
+		update_user(db, user_id, {"status": "suspended", "suspend_reason": reason, "suspended_at": datetime.datetime.now(datetime.UTC)})
 		logger.info(f"User {user_id} suspended. Reason: {reason}")
 		return True
 	finally:
@@ -53,7 +53,7 @@ def initiate_password_reset(email: str) -> str:
 			return None
 		token = secrets.token_urlsafe(32)
 		# Store token in DB or send via email (stub)
-		update_user(db, user.id, {"reset_token": token, "reset_requested_at": datetime.datetime.utcnow()})
+		update_user(db, user.id, {"reset_token": token, "reset_requested_at": datetime.datetime.now(datetime.UTC)})
 		logger.info(f"Password reset token generated for user {user.id} ({email})")
 		return token
 	finally:
@@ -67,7 +67,7 @@ def complete_password_reset(token: str, new_password: str) -> bool:
 	try:
 		# Find user by reset_token
 		from sqlalchemy.orm import Session
-		from ..models.user.model import User
+		from my_app.models.user_model import User
 		user = db.query(User).filter(User.reset_token == token).first()
 		if not user:
 			logger.warning(f"Password reset failed: invalid token {token}")

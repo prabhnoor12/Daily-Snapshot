@@ -1,13 +1,14 @@
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 from my_app.models.user_model import User
-from my_app.schemas.user_schema import UserCreate, User
+from my_app.schemas.user_schema import UserCreate
 from sqlalchemy.exc import IntegrityError
 from typing import Optional
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def get_password_hash(password: str) -> str:
+    password = password[:72]  # bcrypt max length
     return pwd_context.hash(password)
 
 def create_user(db: Session, user: UserCreate) -> User:

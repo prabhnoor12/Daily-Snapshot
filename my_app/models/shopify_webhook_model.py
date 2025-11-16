@@ -1,8 +1,7 @@
-from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey
-from sqlalchemy.orm import declarative_base
-import datetime
 
-Base = declarative_base()
+from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey
+from my_app.database import Base
+import datetime
 
 class ShopifyWebhook(Base):
     __tablename__ = 'shopify_webhooks'

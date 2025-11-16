@@ -61,7 +61,7 @@ def process_webhook_with_retry(webhook_data, max_retries=3):
 		for attempt in range(1, max_retries + 1):
 			try:
 				webhook_obj = parse_and_validate_webhook_payload(webhook_data)
-				db_result = create_webhook(db, webhook_obj.dict())
+				db_result = create_webhook(db, webhook_obj.model_dump())
 				route_webhook_event(webhook_obj)
 				update_webhook(db, db_result.id, {"status": "processed"})
 				logger.info(f"Webhook processed successfully on attempt {attempt}")
