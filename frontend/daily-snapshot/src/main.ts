@@ -2,17 +2,20 @@
 
 import { createApp } from 'vue';
 import App from './App.vue';
-
-import ErrorHandling from './components/error_handling.vue';
-import Sidebar from './components/sidebar.vue';
-import createAppBridge from '@shopify/app-bridge';
+// Removed Shopify App Bridge setup
 import { createRouter, createWebHistory } from 'vue-router';
 
-// Example routes, add your pages/components here
+import AuthPage from './features/auth/authPage.vue';
+import Home from './features/Home.vue';
+import Analytics from './features/Analytics.vue';
+import Settings from './features/Settings.vue';
+
 const routes = [
-	{ path: '/', component: App }, // Main page
-	// { path: '/about', component: About },
-	// { path: '/dashboard', component: Dashboard },
+	{ path: '/', component: Home },
+	{ path: '/auth', component: AuthPage },
+	{ path: '/analytics', component: Analytics },
+	{ path: '/settings', component: Settings },
+	{ path: '/:pathMatch(.*)*', redirect: '/' }, // catch-all
 ];
 
 const router = createRouter({
@@ -22,17 +25,12 @@ const router = createRouter({
 
 
 
-// Shopify App Bridge initialization
-// 'host' should be the base64-encoded shop domain from Shopify (e.g., from query params)
-const appBridge = createAppBridge({
-	apiKey: 'YOUR_SHOPIFY_API_KEY', // Replace with your actual API key or use environment variable
-	host: 'YOUR_BASE64_HOST', // Replace with your actual base64-encoded host from Shopify
-	forceRedirect: true,
-});
+// Removed unused getQueryParam helper
 
+// Create Vue app first so we can mount even if App Bridge fails
 const app = createApp(App);
-app.component('ErrorHandling', ErrorHandling);
-app.component('Sidebar', Sidebar);
 app.use(router);
-app.provide('appBridge', appBridge);
+
+// App Bridge setup removed
 app.mount('#app');
+console.log('[Vue] App mounted.');

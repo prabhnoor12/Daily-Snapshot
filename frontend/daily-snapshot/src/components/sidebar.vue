@@ -19,6 +19,11 @@
           Settings
         </button>
       </li>
+      <li>
+        <button @click="navigateApp('/auth')">
+          Shopify Auth
+        </button>
+      </li>
     </ul>
   </nav>
 </template>
@@ -26,16 +31,23 @@
 <script setup lang="ts">
 import { Redirect } from '@shopify/app-bridge/actions';
 import { inject } from 'vue';
+import { useRouter } from 'vue-router';
 
 const appBridge = inject('appBridge');
+const router = useRouter();
 
 function navigateApp(path: string) {
-  if (appBridge) {
-    // @ts-ignore: appBridge type from inject is unknown
+  // Prefer client-side navigation when App Bridge is unavailable (local dev)
+  if (!appBridge) {
+    router.push(path);
+    return;
+  }
+  try {
     const redirect = Redirect.create(appBridge as any);
     redirect.dispatch(Redirect.Action.APP, path);
-  } else {
-    window.location.href = path;
+  } catch (e) {
+    console.error('[Sidebar] App Bridge redirect failed, falling back to router.', e);
+    router.push(path);
   }
 }
 </script>

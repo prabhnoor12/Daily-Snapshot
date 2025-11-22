@@ -1,0 +1,70 @@
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(120deg, #4f8cff 0%, #235390 100%);
+}
+
+.auth-card {
+  background: #fff;
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  text-align: center;
+  max-width: 350px;
+  width: 100%;
+}
+
+.shopify-logo {
+  width: 60px;
+  margin-bottom: 1rem;
+}
+
+.auth-card h1 {
+  font-size: 1.6rem;
+  color: #235390;
+  margin-bottom: 0.5rem;
+}
+
+.auth-card p {
+  color: #4f8cff;
+  margin-bottom: 1.5rem;
+}
+
+.shop-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e0eaff;
+  border-radius: 8px;
+  margin-bottom: 1.2rem;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+}
+.shop-input:focus {
+  border-color: #4f8cff;
+}
+
+.auth-btn {
+  width: 100%;
+  padding: 0.8rem 0;
+  background: linear-gradient(90deg, #4f8cff 0%, #235390 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(79,140,255,0.08);
+  transition: background 0.2s;
+}
+.auth-btn:hover {
+  background: linear-gradient(90deg, #235390 0%, #4f8cff 100%);
+}
+
+.error-msg {
+  color: #d32f2f;
+  margin-top: 1rem;
+  font-size: 0.98rem;
+}
