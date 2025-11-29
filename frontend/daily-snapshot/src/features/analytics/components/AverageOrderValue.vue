@@ -2,13 +2,13 @@
 
 
 <template>
-  <div class="analytics-card">
-    <h3>Average Order Value</h3>
+  <div class="analytics-card" role="region" aria-labelledby="aov-title">
+    <h3 id="aov-title">Average Order Value</h3>
     <div class="card-subtitle">See the average value of orders placed today.</div>
     <div v-if="loading" class="analytics-loading" aria-busy="true">Loading...</div>
     <div v-else-if="error" class="analytics-error" role="alert">{{ error }}</div>
     <div v-else-if="aov !== null">
-      <div class="aov-display" style="margin-bottom: 1.1rem;">
+      <div class="aov-display">
         <span class="aov-label">Today's AOV:</span>
         <span class="aov-value" :title="formattedAOV">{{ formattedAOV }}</span>
       </div>
@@ -22,7 +22,12 @@
 import { ref, watch, computed } from 'vue';
 import { getAverageOrderValue } from '../../../api/analyticsApi';
 
-const props = defineProps<{ shopId: number }>();
+const props = defineProps({
+  shopId: {
+    type: Number,
+    required: true
+  }
+});
 const aov = ref<number|null>(null);
 const loading = ref(false);
 const error = ref('');
@@ -37,10 +42,16 @@ async function fetchAOV() {
   error.value = '';
   try {
     const res = await getAverageOrderValue(props.shopId);
-    // API may return { aov: number } or just a number
-    aov.value = typeof res === 'object' && res !== null && 'aov' in res ? res.aov : res;
+    let v = res?.data ?? res;
+    if (typeof v === 'object' && v !== null && 'aov' in v) {
+      aov.value = v.aov;
+    } else if (typeof v === 'number') {
+      aov.value = v;
+    } else {
+      throw new Error('Unexpected response format.');
+    }
   } catch (e: any) {
-    error.value = 'Failed to fetch AOV.';
+    error.value = e?.message || 'Failed to fetch AOV.';
     aov.value = null;
   } finally {
     loading.value = false;

@@ -1,23 +1,28 @@
 <style src="./analyticsCard.css"></style>
 
 <template>
-	<div class="analytics-card">
-		<h3>Real-Time Visitor Count</h3>
-		<div class="card-subtitle">See how many visitors are active on your store right now.</div>
-		<div v-if="loading" class="analytics-loading">Loading...</div>
-		<div v-else-if="error" class="analytics-error">{{ error }}</div>
-		<div v-else-if="visitors !== null">
-			<span class="visitor-count" style="font-size: 1.5rem; font-weight: 700; color: #235390;">{{ visitors }}</span>
-		</div>
-		<div v-else class="analytics-empty">No data available.</div>
-	</div>
+  <div class="analytics-card" role="region" aria-labelledby="realtime-visitors-title">
+    <h3 id="realtime-visitors-title">Real-Time Visitor Count</h3>
+    <div class="card-subtitle">See how many visitors are active on your store right now.</div>
+    <div v-if="loading" class="analytics-loading" aria-busy="true">Loading...</div>
+    <div v-else-if="error" class="analytics-error" role="alert">{{ error }}</div>
+    <div v-else-if="visitors !== null">
+      <span class="visitor-count" aria-live="polite">{{ visitors }}</span>
+    </div>
+    <div v-else class="analytics-empty">No data available.</div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { getRealTimeVisitorCount } from '../../../api/analyticsApi';
 
-const props = defineProps<{ shopId: number }>();
+const props = defineProps({
+	shopId: {
+		type: Number,
+		required: true
+	}
+});
 const visitors = ref<number|null>(null);
 const loading = ref(false);
 const error = ref('');
@@ -27,10 +32,16 @@ async function fetchVisitors() {
 	error.value = '';
 	try {
 		const res = await getRealTimeVisitorCount(props.shopId);
-		// API may return { live_visitors: number } or just a number
-		visitors.value = typeof res === 'object' && res !== null && 'live_visitors' in res ? res.live_visitors : res;
+		let v = res?.data ?? res;
+		if (typeof v === 'object' && v !== null && 'live_visitors' in v) {
+			visitors.value = v.live_visitors;
+		} else if (typeof v === 'number') {
+			visitors.value = v;
+		} else {
+			throw new Error('Unexpected response format.');
+		}
 	} catch (e: any) {
-		error.value = 'Failed to fetch visitor count.';
+		error.value = e?.message || 'Failed to fetch visitor count.';
 		visitors.value = null;
 	} finally {
 		loading.value = false;

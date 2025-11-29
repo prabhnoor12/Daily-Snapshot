@@ -21,3 +21,29 @@
   text-align: center;
   margin: 1.5rem 0;
 }
+
+.trend-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.2rem;
+  font-size: 0.98em;
+}
+.trend-table th, .trend-table td {
+  border: 1px solid #e3e3e3;
+  padding: 0.5em 0.7em;
+  text-align: center;
+}
+.trend-table th {
+  background: #f5f8fa;
+  color: #235390;
+  font-weight: 600;
+}
+.trend-table tr:nth-child(even) {
+  background: #f9fbfd;
+}
+@media (max-width: 600px) {
+  .trend-table th, .trend-table td {
+    padding: 0.35em 0.3em;
+    font-size: 0.93em;
+  }
+}

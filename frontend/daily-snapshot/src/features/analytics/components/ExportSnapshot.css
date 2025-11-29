@@ -22,3 +22,32 @@
   margin: 1.5rem 0;
   font-size: 1.08rem;
 }
+
+.export-btn {
+  background: #235390;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1.2rem;
+  transition: background 0.15s;
+}
+.export-btn:disabled {
+  background: #b3c2db;
+  cursor: not-allowed;
+}
+.analytics-success {
+  color: #2a8c4a;
+  text-align: center;
+  margin-top: 0.8rem;
+  font-size: 1.05em;
+}
+.analytics-error {
+  color: #d32f2f;
+  text-align: center;
+  margin-top: 0.8rem;
+  font-size: 1.05em;
+}

@@ -1,18 +1,19 @@
 <style src="./analyticsCard.css"></style>
 
 <template>
-	<div class="analytics-card">
-		<h3>7-Day Trend Charts</h3>
-		<div v-if="loading" class="analytics-loading">Loading...</div>
-		<div v-else-if="error" class="analytics-error">{{ error }}</div>
-		<div v-else-if="data">
-			<table class="trend-table">
+	<div class="analytics-card" role="region" aria-labelledby="seven-day-trends-title">
+		<h3 id="seven-day-trends-title">7-Day Trend Charts</h3>
+		<div class="card-subtitle">Track your sales, orders, and visitors over the past week.</div>
+		<div v-if="loading" class="analytics-loading" aria-busy="true">Loading...</div>
+		<div v-else-if="error" class="analytics-error" role="alert">{{ error }}</div>
+		<div v-else-if="data && Array.isArray(data.dates) && Array.isArray(data.sales) && Array.isArray(data.orders) && Array.isArray(data.visitors) && data.dates.length">
+			<table class="trend-table" aria-label="7-day trends">
 				<thead>
 					<tr>
-						<th>Date</th>
-						<th>Sales</th>
-						<th>Orders</th>
-						<th>Visitors</th>
+						<th scope="col">Date</th>
+						<th scope="col">Sales</th>
+						<th scope="col">Orders</th>
+						<th scope="col">Visitors</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -33,7 +34,12 @@
 import { ref, watch } from 'vue';
 import { get7DayTrendCharts } from '../../../api/analyticsApi';
 
-const props = defineProps<{ shopId: number }>();
+const props = defineProps({
+	shopId: {
+		type: Number,
+		required: true
+	}
+});
 const data = ref<any>(null);
 const loading = ref(false);
 const error = ref('');
@@ -43,9 +49,13 @@ async function fetchData() {
 	error.value = '';
 	try {
 		const res = await get7DayTrendCharts(props.shopId);
-		data.value = res;
+		let d = res?.data || res;
+		if (!d || typeof d !== 'object' || !Array.isArray(d.dates) || !Array.isArray(d.sales) || !Array.isArray(d.orders) || !Array.isArray(d.visitors)) {
+			throw new Error('Unexpected response format.');
+		}
+		data.value = d;
 	} catch (e: any) {
-		error.value = 'Failed to fetch data.';
+		error.value = e?.message || 'Failed to fetch data.';
 		data.value = null;
 	} finally {
 		loading.value = false;

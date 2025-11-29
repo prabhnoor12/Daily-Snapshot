@@ -17,9 +17,12 @@
   margin-bottom: 1.2rem;
 }
 .visitor-count {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #008060;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #235390;
+  display: block;
+  text-align: center;
+  margin: 1.2rem 0 0.7rem 0;
 }
 .analytics-loading, .analytics-empty {
   color: #888;
