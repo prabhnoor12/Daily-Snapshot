@@ -7,7 +7,7 @@
       <div class="sidebar-header">
         <h2>Daily Snapshot</h2>
       </div>
-      <ul class="sidebar-menu">
+      <ul class="sidebar-menu scrollable">
         <li>
           <button @click="navigateAndClose('/')">
             <span class="sidebar-icon"><Icon icon="mdi:home" /></span>
@@ -27,15 +27,15 @@
           </button>
         </li>
         <li>
-          <button @click="navigateAndClose('/auth')">
-            <span class="sidebar-icon"><Icon icon="simple-icons:shopify" /></span>
-            Shopify Auth
-          </button>
-        </li>
-        <li>
           <button @click="navigateAndClose('/subscription')">
             <span class="sidebar-icon"><Icon icon="mdi:credit-card-outline" /></span>
             Subscription
+          </button>
+        </li>
+        <li>
+          <button @click="navigateAndClose('/auth')">
+            <span class="sidebar-icon"><Icon icon="simple-icons:shopify" /></span>
+            Shopify Auth
           </button>
         </li>
       </ul>
