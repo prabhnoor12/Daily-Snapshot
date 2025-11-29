@@ -3,7 +3,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(120deg, #4f8cff 0%, #235390 100%);
+  background: linear-gradient(120deg, #f9fafc 0%, #235390 100%);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .auth-card {
@@ -14,34 +16,68 @@
   text-align: center;
   max-width: 350px;
   width: 100%;
+  margin: 1.5rem;
+  border: 1px solid #f0f1f3;
 }
 
-.shopify-logo {
-  width: 60px;
-  margin-bottom: 1rem;
+.shopify-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3.2rem;
+  color: #95bf47;
+  margin-bottom: 1.2rem;
 }
 
-.auth-card h1 {
-  font-size: 1.6rem;
-  color: #235390;
+.auth-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #222;
   margin-bottom: 0.5rem;
+  letter-spacing: 0.2px;
+  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
 }
 
-.auth-card p {
-  color: #4f8cff;
+.auth-desc {
+  color: #235390;
   margin-bottom: 1.5rem;
+  font-size: 1rem;
+  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+}
+
+.input-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1.2rem;
 }
 
 .shop-input {
   width: 100%;
+  max-width: 260px;
+  margin-bottom: 0;
   padding: 0.75rem 1rem;
   border: 1px solid #e0eaff;
   border-radius: 8px;
-  margin-bottom: 1.2rem;
   font-size: 1rem;
   outline: none;
+  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
   transition: border 0.2s;
 }
+
+/* Remove duplicate h1 styling, use .auth-title instead */
+
+
+
+.shop-input::placeholder {
+  color: #b0b8c1;
+  opacity: 1;
+  font-size: 0.98rem;
+  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+  letter-spacing: 0.1px;
+}
+
 .shop-input:focus {
   border-color: #4f8cff;
 }
@@ -59,6 +95,7 @@
   box-shadow: 0 2px 8px rgba(79,140,255,0.08);
   transition: background 0.2s;
 }
+
 .auth-btn:hover {
   background: linear-gradient(90deg, #235390 0%, #4f8cff 100%);
 }

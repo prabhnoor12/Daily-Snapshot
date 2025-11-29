@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@iconify-icons/simple-icons": "^1.2.74",
     "@shopify/app-bridge": "^3.7.10",
     "axios": "^1.13.2",
     "vue": "^3.5.24",

@@ -1,43 +1,54 @@
 <template>
-  <nav class="sidebar">
-    <div class="sidebar-header">
-      <h2>Daily Snapshot</h2>
-    </div>
-    <ul class="sidebar-menu">
-      <li>
-        <button @click="navigateApp('/')">
-          Home
-        </button>
-      </li>
-      <li>
-        <button @click="navigateApp('/analytics')">
-          Analytics
-        </button>
-      </li>
-      <li>
-        <button @click="navigateApp('/settings')">
-          Settings
-        </button>
-      </li>
-      <li>
-        <button @click="navigateApp('/auth')">
-          Shopify Auth
-        </button>
-      </li>
-    </ul>
-  </nav>
+  <div>
+    <button class="sidebar-toggle" @click="sidebarOpen = !sidebarOpen">
+      <Icon icon="mdi:menu" />
+    </button>
+    <nav class="sidebar" :class="{ open: sidebarOpen }">
+      <div class="sidebar-header">
+        <h2>Daily Snapshot</h2>
+      </div>
+      <ul class="sidebar-menu">
+        <li>
+          <button @click="navigateAndClose('/')">
+            <span class="sidebar-icon"><Icon icon="mdi:home" /></span>
+            Home
+          </button>
+        </li>
+        <li>
+          <button @click="navigateAndClose('/analytics')">
+            <span class="sidebar-icon"><Icon icon="mdi:chart-bar" /></span>
+            Analytics
+          </button>
+        </li>
+        <li>
+          <button @click="navigateAndClose('/settings')">
+            <span class="sidebar-icon"><Icon icon="mdi:cog" /></span>
+            Settings
+          </button>
+        </li>
+        <li>
+          <button @click="navigateAndClose('/auth')">
+            <span class="sidebar-icon"><Icon icon="simple-icons:shopify" /></span>
+            Shopify Auth
+          </button>
+        </li>
+      </ul>
+    </nav>
+    <div v-if="sidebarOpen" class="sidebar-backdrop" @click="sidebarOpen = false"></div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { Redirect } from '@shopify/app-bridge/actions';
-import { inject } from 'vue';
+import { inject, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { Icon } from '@iconify/vue';
 
 const appBridge = inject('appBridge');
 const router = useRouter();
+const sidebarOpen = ref(false);
 
 function navigateApp(path: string) {
-  // Prefer client-side navigation when App Bridge is unavailable (local dev)
   if (!appBridge) {
     router.push(path);
     return;
@@ -49,6 +60,11 @@ function navigateApp(path: string) {
     console.error('[Sidebar] App Bridge redirect failed, falling back to router.', e);
     router.push(path);
   }
+}
+
+function navigateAndClose(path: string) {
+  navigateApp(path);
+  sidebarOpen.value = false;
 }
 </script>
 

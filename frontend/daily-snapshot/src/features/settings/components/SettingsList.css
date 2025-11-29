@@ -1,0 +1,53 @@
+.settings-list {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  padding: 2rem 1.5rem;
+  max-width: 420px;
+  margin: 1.5rem auto;
+  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+}
+.settings-list h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  color: #235390;
+}
+.settings-loading, .settings-empty {
+  color: #888;
+  text-align: center;
+  margin: 1.5rem 0;
+}
+.settings-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.2rem 0;
+}
+.settings-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #f0f1f3;
+  font-size: 1rem;
+}
+.setting-key {
+  color: #222;
+  font-weight: 500;
+}
+.setting-value {
+  color: #4f8cff;
+}
+.settings-btn {
+  background: linear-gradient(90deg, #4f8cff 0%, #235390 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.settings-btn:hover {
+  background: linear-gradient(90deg, #235390 0%, #4f8cff 100%);
+}

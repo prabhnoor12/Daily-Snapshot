@@ -1,0 +1,52 @@
+.settings-bulk-update {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  padding: 1.5rem 1.2rem;
+  max-width: 420px;
+  margin: 1.5rem auto;
+  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+}
+.settings-bulk-update h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #235390;
+}
+.settings-textarea {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #e0eaff;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  font-family: inherit;
+  margin-bottom: 1rem;
+  resize: vertical;
+  min-height: 90px;
+}
+.settings-bulk-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.settings-btn {
+  background: linear-gradient(90deg, #4f8cff 0%, #235390 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.settings-btn:hover {
+  background: linear-gradient(90deg, #235390 0%, #4f8cff 100%);
+}
+.settings-message {
+  margin-top: 1rem;
+  color: #008060;
+  font-size: 0.98rem;
+  text-align: center;
+}

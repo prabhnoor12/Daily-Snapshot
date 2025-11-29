@@ -7,4 +7,13 @@
 .main-content {
   flex: 1;
   padding: 2rem;
+  margin-left: 260px;
+  transition: margin-left 0.3s;
+}
+
+@media (max-width: 900px) {
+  .main-content {
+    margin-left: 0;
+    padding: 1rem 0.5rem;
+  }
 }
