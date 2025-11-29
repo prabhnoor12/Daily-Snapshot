@@ -13,16 +13,34 @@
   margin-bottom: 1rem;
   color: #235390;
 }
-.settings-textarea {
-  width: 100%;
+.settings-form-row {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+.settings-label {
+  min-width: 110px;
+  font-weight: 500;
+  color: #235390;
+}
+.settings-input {
+  flex: 1;
   border-radius: 8px;
   border: 1px solid #e0eaff;
-  padding: 0.8rem 1rem;
+  padding: 0.7rem 1rem;
   font-size: 1rem;
   font-family: inherit;
-  margin-bottom: 1rem;
-  resize: vertical;
-  min-height: 90px;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.settings-input:focus {
+  border-color: #4f8cff;
+  box-shadow: 0 0 0 2px #e0eaff;
+}
+.settings-checkbox-input {
+  width: 18px;
+  height: 18px;
+  accent-color: #4f8cff;
 }
 .settings-bulk-actions {
   display: flex;
@@ -35,14 +53,18 @@
   color: #fff;
   border: none;
   border-radius: 8px;
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
+  padding: 0.8rem 1.7rem;
+  font-size: 1.08rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, box-shadow 0.2s;
+  margin-top: 1.2rem;
+  box-shadow: 0 2px 8px rgba(79,140,255,0.07);
+  letter-spacing: 0.1px;
 }
-.settings-btn:hover {
+.settings-btn:hover, .settings-btn:focus {
   background: linear-gradient(90deg, #235390 0%, #4f8cff 100%);
+  box-shadow: 0 4px 16px rgba(79,140,255,0.13);
 }
 .settings-message {
   margin-top: 1rem;

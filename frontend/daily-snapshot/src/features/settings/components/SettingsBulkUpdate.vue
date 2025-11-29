@@ -2,7 +2,25 @@
   <div class="settings-bulk-update">
     <h3>Bulk Update Settings</h3>
     <form @submit.prevent="submitBulkUpdate">
-      <textarea v-model="settingsJson" class="settings-textarea" rows="6" placeholder="Paste settings JSON here..."></textarea>
+      <div class="settings-form-row">
+        <label class="settings-label">Theme</label>
+        <select v-model="form.theme" class="settings-input">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </div>
+      <div class="settings-form-row">
+        <label class="settings-label">Notifications</label>
+        <input type="checkbox" v-model="form.notifications" class="settings-checkbox-input" />
+      </div>
+      <div class="settings-form-row">
+        <label class="settings-label">Language</label>
+        <select v-model="form.language" class="settings-input">
+          <option value="en">English</option>
+          <option value="es">Spanish</option>
+          <option value="fr">French</option>
+        </select>
+      </div>
       <div class="settings-bulk-actions">
         <label>
           <input type="checkbox" v-model="transactional" /> Transactional
@@ -19,21 +37,22 @@ import { ref } from 'vue';
 import { bulkUpdateSettings } from '../../../api/settingApi';
 
 const props = defineProps<{ userId: number }>();
-const settingsJson = ref('');
 const transactional = ref(false);
 const message = ref('');
+const form = ref({
+  theme: 'light',
+  notifications: true,
+  language: 'en',
+});
 
 async function submitBulkUpdate() {
   message.value = '';
-  let settingsObj;
   try {
-    settingsObj = JSON.parse(settingsJson.value);
-  } catch {
-    message.value = 'Invalid JSON.';
-    return;
-  }
-  try {
-    await bulkUpdateSettings(props.userId, settingsObj, transactional.value);
+    await bulkUpdateSettings(props.userId, {
+      theme: form.value.theme,
+      notifications: form.value.notifications,
+      language: form.value.language,
+    }, transactional.value);
     message.value = 'Settings updated successfully.';
   } catch {
     message.value = 'Failed to update settings.';

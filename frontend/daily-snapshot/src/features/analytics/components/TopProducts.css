@@ -1,0 +1,42 @@
+.analytics-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  margin-bottom: 2rem;
+  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+  min-width: 260px;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.analytics-card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #235390;
+  margin-bottom: 1.2rem;
+}
+.analytics-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.2rem 0;
+}
+.analytics-card li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #f0f1f3;
+  font-size: 1rem;
+}
+.product-name {
+  color: #222;
+  font-weight: 500;
+}
+.product-value {
+  color: #4f8cff;
+}
+.analytics-loading, .analytics-empty {
+  color: #888;
+  text-align: center;
+  margin: 1.5rem 0;
+}

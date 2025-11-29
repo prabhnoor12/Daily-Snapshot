@@ -7,8 +7,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import AuthPage from './features/auth/authPage.vue';
 import Home from './features/Home.vue';
-import Analytics from './features/Analytics.vue';
-import Settings from './features/Settings.vue';
+import Analytics from './features/analytics/page/analytics.vue';
+import Settings from './features/settings/page/settingPage.vue';
 
 const routes = [
 	{ path: '/', component: Home },

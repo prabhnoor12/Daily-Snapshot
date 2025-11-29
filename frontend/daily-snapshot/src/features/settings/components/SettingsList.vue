@@ -5,9 +5,9 @@
     <div v-else>
       <div v-if="settings && Object.keys(settings).length">
         <ul>
-          <li v-for="(value, key) in settings" :key="key">
+          <li v-for="key in validKeys" :key="key">
             <span class="setting-key">{{ key }}</span>
-            <span class="setting-value">{{ value }}</span>
+            <span class="setting-value">{{ settings[key] }}</span>
           </li>
         </ul>
       </div>
@@ -18,12 +18,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 import { getSettings } from '../../../api/settingApi';
 
 const props = defineProps<{ userId: number }>();
 const settings = ref<Record<string, any>>({});
 const loading = ref(false);
+const validKeys = ['theme', 'notifications', 'language'];
 
 async function fetchSettings() {
   loading.value = true;

@@ -2,10 +2,14 @@
   <div class="settings-reset">
     <h3>Reset Settings</h3>
     <form @submit.prevent="submitReset">
-      <input v-model="keysInput" class="settings-input" placeholder="Comma-separated keys (optional)" />
-      <label class="settings-checkbox">
-        <input type="checkbox" v-model="notifyUser" /> Notify user
-      </label>
+      <div class="settings-form-row">
+        <label class="settings-label">Keys (optional)</label>
+        <input v-model="keysInput" class="settings-input" placeholder="e.g. theme,language" />
+      </div>
+      <div class="settings-form-row">
+        <label class="settings-label">Notify user</label>
+        <input type="checkbox" v-model="notifyUser" class="settings-checkbox-input" />
+      </div>
       <button class="settings-btn" type="submit">Reset</button>
     </form>
     <div v-if="message" class="settings-message">{{ message }}</div>

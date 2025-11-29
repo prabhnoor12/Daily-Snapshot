@@ -1,3 +1,6 @@
+.settings-list ul {
+  margin-bottom: 1.5rem;
+}
 .settings-list {
   background: #fff;
   border-radius: 12px;
@@ -42,12 +45,16 @@
   color: #fff;
   border: none;
   border-radius: 8px;
-  padding: 0.7rem 1.5rem;
-  font-size: 1rem;
+  padding: 0.8rem 1.7rem;
+  font-size: 1.08rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, box-shadow 0.2s;
+  margin-top: 1.2rem;
+  box-shadow: 0 2px 8px rgba(79,140,255,0.07);
+  letter-spacing: 0.1px;
 }
-.settings-btn:hover {
+.settings-btn:hover, .settings-btn:focus {
   background: linear-gradient(90deg, #235390 0%, #4f8cff 100%);
+  box-shadow: 0 4px 16px rgba(79,140,255,0.13);
 }
