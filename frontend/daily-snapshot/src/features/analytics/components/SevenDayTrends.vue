@@ -7,6 +7,13 @@
 		<div v-if="loading" class="analytics-loading" aria-busy="true">Loading...</div>
 		<div v-else-if="error" class="analytics-error" role="alert">{{ error }}</div>
 		<div v-else-if="data && Array.isArray(data.dates) && Array.isArray(data.sales) && Array.isArray(data.orders) && Array.isArray(data.visitors) && data.dates.length">
+			<BaseLineChart
+				:labels="data.dates"
+				:datasets="chartDatasets"
+				y-label="Count"
+				title="7-Day Trends"
+				style="margin-bottom: 1.5rem;"
+			/>
 			<table class="trend-table" aria-label="7-day trends">
 				<thead>
 					<tr>
@@ -31,8 +38,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { get7DayTrendCharts } from '../../../api/analyticsApi';
+import BaseLineChart from './BaseLineChart.vue';
 
 const props = defineProps({
 	shopId: {
@@ -43,6 +51,30 @@ const props = defineProps({
 const data = ref<any>(null);
 const loading = ref(false);
 const error = ref('');
+
+const chartDatasets = computed(() => {
+	if (!data.value) return [];
+	return [
+		{
+			label: 'Sales',
+			data: data.value.sales || [],
+			borderColor: '#235390',
+			backgroundColor: '#235390',
+		},
+		{
+			label: 'Orders',
+			data: data.value.orders || [],
+			borderColor: '#2a8c4a',
+			backgroundColor: '#2a8c4a',
+		},
+		{
+			label: 'Visitors',
+			data: data.value.visitors || [],
+			borderColor: '#e6a700',
+			backgroundColor: '#e6a700',
+		},
+	];
+});
 
 async function fetchData() {
 	loading.value = true;

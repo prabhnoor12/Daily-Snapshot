@@ -27,26 +27,35 @@
 }
 </style>
 
-</template>
 <template>
 	<div class="analytics-card" role="region" aria-labelledby="top-products-title">
 		<h3 id="top-products-title">Top Products of the Day</h3>
 		<div class="card-subtitle">See which products are leading in sales and orders today.</div>
 		<div v-if="loading" class="analytics-loading" aria-busy="true">Loading...</div>
 		<div v-else-if="error" class="analytics-error" role="alert">{{ error }}</div>
-		<ul v-else-if="products.length" class="top-products-list">
-			<li v-for="product in products" :key="product.product" class="top-product-item">
-				<span class="product-name">{{ product.product }}</span>
-				<span class="product-value">Sales: {{ product.sales ?? '-' }}, Orders: {{ product.orders ?? '-' }}</span>
-			</li>
-		</ul>
+		<template v-else-if="products.length">
+			<BaseBarChart
+				:labels="products.map(p => p.product)"
+				:datasets="barChartDatasets"
+				y-label="Count"
+				title="Top Products: Sales & Orders"
+				style="margin-bottom: 1.5rem;"
+			/>
+			<ul class="top-products-list">
+				<li v-for="product in products" :key="product.product" class="top-product-item">
+					<span class="product-name">{{ product.product }}</span>
+					<span class="product-value">Sales: {{ product.sales ?? '-' }}, Orders: {{ product.orders ?? '-' }}</span>
+				</li>
+			</ul>
+		</template>
 		<div v-else class="analytics-empty">No data available.</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { getTopProductsOfDay } from '../../../api/analyticsApi';
+import BaseBarChart from './BaseBarChart.vue';
 
 const props = defineProps({
 	shopId: {
@@ -63,6 +72,21 @@ const products = ref<any[]>([]);
 const loading = ref(false);
 const error = ref('');
 
+const barChartDatasets = computed(() => {
+	if (!products.value.length) return [];
+	return [
+		{
+			label: 'Sales',
+			data: products.value.map(p => p.sales ?? 0),
+			backgroundColor: '#235390',
+		},
+		{
+			label: 'Orders',
+			data: products.value.map(p => p.orders ?? 0),
+			backgroundColor: '#2a8c4a',
+		},
+	];
+});
 
 async function fetchProducts() {
 	loading.value = true;

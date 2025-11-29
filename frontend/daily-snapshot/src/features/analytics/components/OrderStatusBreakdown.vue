@@ -5,12 +5,21 @@
     <div class="card-subtitle">Track the fulfillment, pending, and cancelled orders for today.</div>
     <div v-if="loading" class="analytics-loading" aria-busy="true">Loading...</div>
     <div v-else-if="error" class="analytics-error" role="alert">{{ error }}</div>
-    <div v-else-if="data && typeof data === 'object' && (data.fulfilled !== undefined || data.pending !== undefined || data.cancelled !== undefined)" class="order-status-list">
-      <ul>
-        <li><strong>Fulfilled:</strong> {{ data.fulfilled ?? 0 }}</li>
-        <li><strong>Pending:</strong> {{ data.pending ?? 0 }}</li>
-        <li><strong>Cancelled:</strong> {{ data.cancelled ?? 0 }}</li>
-      </ul>
+    <div v-else-if="data && typeof data === 'object' && (data.fulfilled !== undefined || data.pending !== undefined || data.cancelled !== undefined)">
+      <BasePieChart
+        :labels="['Fulfilled', 'Pending', 'Cancelled']"
+        :data="[data.fulfilled ?? 0, data.pending ?? 0, data.cancelled ?? 0]"
+        :colors="['#2a8c4a', '#e6a700', '#d32f2f']"
+        title="Order Status Breakdown"
+        style="margin-bottom: 1.5rem;"
+      />
+      <div class="order-status-list">
+        <ul>
+          <li><strong>Fulfilled:</strong> {{ data.fulfilled ?? 0 }}</li>
+          <li><strong>Pending:</strong> {{ data.pending ?? 0 }}</li>
+          <li><strong>Cancelled:</strong> {{ data.cancelled ?? 0 }}</li>
+        </ul>
+      </div>
     </div>
     <div v-else class="analytics-empty">No data available.</div>
   </div>
@@ -19,6 +28,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { getOrderStatusBreakdown } from '../../../api/analyticsApi';
+import BasePieChart from './BasePieChart.vue';
 
 const props = defineProps({
   shopId: {

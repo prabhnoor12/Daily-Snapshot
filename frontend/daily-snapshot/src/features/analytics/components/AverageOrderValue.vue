@@ -8,6 +8,14 @@
     <div v-if="loading" class="analytics-loading" aria-busy="true">Loading...</div>
     <div v-else-if="error" class="analytics-error" role="alert">{{ error }}</div>
     <div v-else-if="aov !== null">
+      <BaseLineChart
+        v-if="aovTrend.length > 1"
+        :labels="aovTrendLabels"
+        :datasets="[{ label: 'AOV', data: aovTrend, borderColor: '#2a8c4a', backgroundColor: '#2a8c4a' }]"
+        y-label="AOV"
+        title="AOV Trend (7 days)"
+        style="margin-bottom: 1.2rem; height: 180px;"
+      />
       <div class="aov-display">
         <span class="aov-label">Today's AOV:</span>
         <span class="aov-value" :title="formattedAOV">{{ formattedAOV }}</span>
@@ -21,6 +29,7 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue';
 import { getAverageOrderValue } from '../../../api/analyticsApi';
+import BaseLineChart from './BaseLineChart.vue';
 
 const props = defineProps({
   shopId: {
@@ -31,6 +40,8 @@ const props = defineProps({
 const aov = ref<number|null>(null);
 const loading = ref(false);
 const error = ref('');
+const aovTrend = ref<number[]>([]);
+const aovTrendLabels = ref<string[]>([]);
 
 const formattedAOV = computed(() => {
   if (aov.value === null || isNaN(aov.value)) return '-';
@@ -45,14 +56,26 @@ async function fetchAOV() {
     let v = res?.data ?? res;
     if (typeof v === 'object' && v !== null && 'aov' in v) {
       aov.value = v.aov;
+      // If API provides a trend array, use it; else fallback to just today
+      if (Array.isArray(v.trend) && Array.isArray(v.trendLabels)) {
+        aovTrend.value = v.trend;
+        aovTrendLabels.value = v.trendLabels;
+      } else {
+        aovTrend.value = [v.aov];
+        aovTrendLabels.value = ['Today'];
+      }
     } else if (typeof v === 'number') {
       aov.value = v;
+      aovTrend.value = [v];
+      aovTrendLabels.value = ['Today'];
     } else {
       throw new Error('Unexpected response format.');
     }
   } catch (e: any) {
     error.value = e?.message || 'Failed to fetch AOV.';
     aov.value = null;
+    aovTrend.value = [];
+    aovTrendLabels.value = [];
   } finally {
     loading.value = false;
   }
