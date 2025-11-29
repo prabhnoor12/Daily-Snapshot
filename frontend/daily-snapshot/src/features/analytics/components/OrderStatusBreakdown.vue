@@ -1,10 +1,12 @@
+<style src="./analyticsCard.css"></style>
 <template>
   <div class="analytics-card">
     <h3>Order Status Breakdown</h3>
+    <div class="card-subtitle">Track the fulfillment, pending, and cancelled orders for today.</div>
     <div v-if="loading" class="analytics-loading">Loading...</div>
     <div v-else-if="error" class="analytics-error">{{ error }}</div>
     <div v-else-if="data">
-      <ul>
+      <ul style="margin-bottom: 1.1rem;">
         <li>Fulfilled: {{ data.fulfilled }}</li>
         <li>Pending: {{ data.pending }}</li>
         <li>Cancelled: {{ data.cancelled }}</li>

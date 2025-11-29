@@ -1,14 +1,16 @@
+<style src="./analyticsCard.css"></style>
 
 <template>
 	<div class="analytics-card">
 		<h3>Top Products of the Day</h3>
+		<div class="card-subtitle">See which products are leading in sales and orders today.</div>
 		<div v-if="loading" class="analytics-loading">Loading...</div>
 		<div v-else-if="error" class="analytics-error">{{ error }}</div>
 		<div v-else-if="products.length">
-			<ul>
-				<li v-for="product in products" :key="product.product">
-					<span class="product-name">{{ product.product }}</span>
-					<span class="product-value">Sales: {{ product.sales ?? '-' }}, Orders: {{ product.orders ?? '-' }}</span>
+			<ul style="margin-bottom: 1.1rem;">
+				<li v-for="(product, idx) in products" :key="product.product" :style="{ background: idx % 2 === 0 ? '#f6f8fa' : 'transparent', padding: '0.4rem 0.2rem', borderRadius: '6px', marginBottom: '0.2rem' }">
+					<span class="product-name" style="font-weight: 600;">{{ product.product }}</span>
+					<span class="product-value" style="margin-left: 0.7rem; color: #4a6fa1;">Sales: {{ product.sales ?? '-' }}, Orders: {{ product.orders ?? '-' }}</span>
 				</li>
 			</ul>
 		</div>

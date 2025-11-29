@@ -1,3 +1,4 @@
+<style src="./analyticsCard.css"></style>
 
 <template>
   <div class="analytics-card">

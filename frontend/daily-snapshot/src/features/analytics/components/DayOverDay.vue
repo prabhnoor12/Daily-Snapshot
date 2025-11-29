@@ -1,13 +1,15 @@
+<style src="./analyticsCard.css"></style>
 <template>
   <div class="analytics-card">
     <h3>Day Over Day Performance</h3>
+    <div class="card-subtitle">Compare today’s sales, orders, and visitors with yesterday.</div>
     <div v-if="loading" class="analytics-loading">Loading...</div>
     <div v-else-if="error" class="analytics-error">{{ error }}</div>
     <div v-else-if="data">
-      <div class="dod-section">
+      <div class="dod-section" style="display: flex; gap: 2.5rem; margin-bottom: 1.2rem;">
         <div>
           <strong>Today</strong>
-          <ul>
+          <ul style="margin-bottom: 0.7rem;">
             <li>Sales: {{ data.today.sales }}</li>
             <li>Orders: {{ data.today.orders }}</li>
             <li>Visitors: {{ data.today.visitors }}</li>
@@ -15,7 +17,7 @@
         </div>
         <div>
           <strong>Yesterday</strong>
-          <ul>
+          <ul style="margin-bottom: 0.7rem;">
             <li>Sales: {{ data.yesterday.sales }}</li>
             <li>Orders: {{ data.yesterday.orders }}</li>
             <li>Visitors: {{ data.yesterday.visitors }}</li>
@@ -23,7 +25,6 @@
         </div>
       </div>
     </div>
-
     <div v-else class="analytics-empty">No data available.</div>
   </div>
 </template>
