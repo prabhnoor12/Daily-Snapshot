@@ -1,3 +1,4 @@
+
 <template>
   <div class="analytics-card">
     <h3>Customizable Dashboard Metrics</h3>

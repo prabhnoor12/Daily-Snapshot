@@ -1,3 +1,5 @@
+
+<template>
   <div class="analytics-card">
     <h3>Mobile Dashboard Data</h3>
     <div v-if="loading" class="analytics-loading">Loading...</div>
@@ -39,6 +41,5 @@ async function fetchData() {
 watch(() => props.shopId, fetchData, { immediate: true });
 </script>
 
-<style src="./analyticsCard.css"></style>
 
 <style src="./MobileDashboard.css"></style>

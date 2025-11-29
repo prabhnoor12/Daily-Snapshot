@@ -1,3 +1,5 @@
+
+<template>
   <div class="analytics-card">
     <h3>Export Daily Snapshot</h3>
     <button @click="exportSnapshot" :disabled="loading">
@@ -42,6 +44,5 @@ async function exportSnapshot() {
 }
 </script>
 
-<style src="./analyticsCard.css"></style>
 
 <style src="./ExportSnapshot.css"></style>

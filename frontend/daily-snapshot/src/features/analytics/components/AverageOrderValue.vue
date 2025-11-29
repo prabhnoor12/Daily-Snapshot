@@ -1,4 +1,5 @@
 
+
 <template>
   <div class="analytics-card">
     <h3>Average Order Value</h3>
@@ -46,6 +47,5 @@ async function fetchAOV() {
 
 watch(() => props.shopId, fetchAOV, { immediate: true });
 </script>
-
 
 <style src="./AverageOrderValue.css"></style>

@@ -59,5 +59,4 @@ async function fetchAlerts() {
 watch(() => props.shopId, fetchAlerts, { immediate: true });
 </script>
 
-
 <style src="./BasicAlerts.css"></style>

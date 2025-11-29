@@ -54,4 +54,3 @@ async function fetchData() {
 watch(() => props.shopId, fetchData, { immediate: true });
 </script>
 
-<style src="./analyticsCard.css"></style>

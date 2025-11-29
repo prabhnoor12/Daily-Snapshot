@@ -38,4 +38,3 @@ async function fetchVisitors() {
 watch(() => props.shopId, fetchVisitors, { immediate: true });
 </script>
 
-<style src="./analyticsCard.css"></style>

@@ -25,12 +25,19 @@ const products = ref<any[]>([]);
 const loading = ref(false);
 const error = ref('');
 
+
 async function fetchProducts() {
 	loading.value = true;
 	error.value = '';
 	try {
 		const res = await getTopProductsOfDay(props.shopId, props.topN || 3);
-		products.value = res;
+		// Handle both { data: [...] } and [...] directly
+		let arr = Array.isArray(res) ? res : (Array.isArray(res?.data) ? res.data : []);
+		products.value = arr;
+		if (!Array.isArray(arr)) {
+			error.value = 'Unexpected response format.';
+			products.value = [];
+		}
 	} catch (e: any) {
 		error.value = 'Failed to fetch products.';
 		products.value = [];
@@ -42,4 +49,3 @@ async function fetchProducts() {
 watch(() => [props.shopId, props.topN], fetchProducts, { immediate: true });
 </script>
 
-<style src="./analyticsCard.css"></style>
