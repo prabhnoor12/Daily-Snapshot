@@ -1,0 +1,27 @@
+.subscription-detail {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+.subscription-detail h3 {
+  margin-bottom: 1rem;
+}
+.subscription-detail .actions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+.subscription-detail button {
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.subscription-detail button:hover {
+  background: #218838;
+}

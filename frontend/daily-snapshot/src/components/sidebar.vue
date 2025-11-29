@@ -32,6 +32,12 @@
             Shopify Auth
           </button>
         </li>
+        <li>
+          <button @click="navigateAndClose('/subscription')">
+            <span class="sidebar-icon"><Icon icon="mdi:credit-card-outline" /></span>
+            Subscription
+          </button>
+        </li>
       </ul>
     </nav>
     <div v-if="sidebarOpen" class="sidebar-backdrop" @click="sidebarOpen = false"></div>

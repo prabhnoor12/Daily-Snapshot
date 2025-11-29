@@ -1,0 +1,33 @@
+/* subscriptionPage.css - Tabbed layout and page styling */
+
+.subscription-page {
+	max-width: 800px;
+	margin: 2rem auto;
+	background: #fff;
+	border-radius: 10px;
+	box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+	padding: 2rem;
+}
+.tabs {
+	display: flex;
+	border-bottom: 2px solid #e0e0e0;
+	margin-bottom: 2rem;
+}
+.tab {
+	padding: 0.7rem 2rem;
+	cursor: pointer;
+	font-weight: 600;
+	color: #555;
+	background: none;
+	border: none;
+	border-bottom: 3px solid transparent;
+	transition: border-color 0.2s, color 0.2s;
+}
+.tab.active {
+	color: #007bff;
+	border-bottom: 3px solid #007bff;
+	background: #f4f8fb;
+}
+.tab-content {
+	margin-top: 1.5rem;
+}

@@ -1,0 +1,28 @@
+.subscription-list {
+  padding: 1rem;
+}
+.subscription-list ul {
+  list-style: none;
+  padding: 0;
+}
+.subscription-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  background: #f9f9f9;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+}
+.subscription-list button {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.3rem 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.subscription-list button:hover {
+  background: #0056b3;
+}

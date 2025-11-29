@@ -1,0 +1,96 @@
+/* subscriptionComponents.css - Styles for subscription components */
+
+.subscription-list {
+  padding: 1rem;
+}
+.subscription-list ul {
+  list-style: none;
+  padding: 0;
+}
+.subscription-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  background: #f9f9f9;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+}
+.subscription-list button {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.3rem 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.subscription-list button:hover {
+  background: #0056b3;
+}
+
+.subscription-detail {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+.subscription-detail h3 {
+  margin-bottom: 1rem;
+}
+.subscription-detail .actions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+.subscription-detail button {
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.subscription-detail button:hover {
+  background: #218838;
+}
+
+.subscription-form {
+  background: #f4f8fb;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 350px;
+}
+.subscription-form h3 {
+  margin-bottom: 1rem;
+}
+.subscription-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+}
+.subscription-form input,
+.subscription-form select {
+  margin-top: 0.3rem;
+  padding: 0.4rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+.subscription-form button {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.subscription-form button:hover {
+  background: #0056b3;
+}

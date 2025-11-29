@@ -9,12 +9,14 @@ import AuthPage from './features/auth/authPage.vue';
 import Home from './features/Home.vue';
 import Analytics from './features/analytics/page/analytics.vue';
 import Settings from './features/settings/page/settingPage.vue';
+import Subscription from './features/subscription/page/subscriptionPage.vue';
 
 const routes = [
 	{ path: '/', component: Home },
 	{ path: '/auth', component: AuthPage },
 	{ path: '/analytics', component: Analytics },
 	{ path: '/settings', component: Settings },
+	{ path: '/subscription', component: Subscription },
 	{ path: '/:pathMatch(.*)*', redirect: '/' }, // catch-all
 ];
 
