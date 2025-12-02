@@ -1,3 +1,121 @@
+/* Spinner overlay */
+.spinner-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255,255,255,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+/* Status and payment badges */
+.status-badge {
+  display: inline-block;
+  padding: 0.2em 0.7em;
+  border-radius: 12px;
+  font-size: 0.9em;
+  margin-left: 0.5em;
+  color: #fff;
+}
+.status-badge.active { background: #28a745; }
+.status-badge.trial { background: #ffc107; color: #333; }
+.status-badge.expired { background: #dc3545; }
+.status-badge.cancelled { background: #6c757d; }
+.payment-badge {
+  display: inline-block;
+  padding: 0.1em 0.5em;
+  border-radius: 8px;
+  font-size: 0.85em;
+  margin-left: 0.3em;
+  color: #fff;
+}
+.payment-badge.paid { background: #28a745; }
+.payment-badge.failed { background: #dc3545; }
+.payment-badge.pending { background: #ffc107; color: #333; }
+.icon-btn, .icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1em;
+  margin-left: 0.3em;
+}
+/* Section and detail rows */
+.section-details, .section-actions, .section-history {
+  margin-bottom: 1.2rem;
+}
+.detail-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.collapsible {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+/* Modal and skeleton loader */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.modal {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+  min-width: 300px;
+}
+.skeleton-loader {
+  height: 120px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 37%, #f0f0f0 63%);
+  background-size: 400% 100%;
+  animation: skeleton-loading 1.2s ease-in-out infinite;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+@keyframes skeleton-loading {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+/* Feedback messages */
+.feedback {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+.feedback.success {
+  background: #e6ffed;
+  color: #155724;
+  border: 1px solid #b7eb8f;
+}
+.feedback.error {
+  background: #fff1f0;
+  color: #a8071a;
+  border: 1px solid #ffa39e;
+}
 .subscription-detail {
   background: #fff;
   border-radius: 8px;

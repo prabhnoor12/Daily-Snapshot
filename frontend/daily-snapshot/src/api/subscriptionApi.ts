@@ -26,3 +26,15 @@ export function handleExpiry(subscriptionId: number, notifyUser: boolean = true)
 export function isInGracePeriod(subscriptionId: number, notifyUser: boolean = true) {
   return axios.get(`${API_BASE}/in-grace/${subscriptionId}`, { params: { notify_user: notifyUser } });
 }
+
+export function updatePlan(id: number, value: string) {
+  throw new Error('Function not implemented.');
+}
+export function retryPayment(id: number) {
+  throw new Error('Function not implemented.');
+}
+
+export function cancelSubscription(id: number) {
+  throw new Error('Function not implemented.');
+}
+
