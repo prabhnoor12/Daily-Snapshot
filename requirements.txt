@@ -10,7 +10,7 @@ gunicorn
 # Security and Auth
 passlib
 jwt
-
+pydantic[email]
 # Data validation
 pydantic
 
