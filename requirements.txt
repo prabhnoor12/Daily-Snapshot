@@ -6,11 +6,12 @@ flask
 sqlalchemy
 alembic
 psycopg2
+pydantic[email]
 gunicorn
 # Security and Auth
 passlib
 jwt
-pydantic[email]
+
 # Data validation
 pydantic
 
