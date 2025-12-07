@@ -6,7 +6,7 @@ flask
 sqlalchemy
 alembic
 psycopg2
-
+gunicorn
 # Security and Auth
 passlib
 jwt
