@@ -2,7 +2,7 @@
 
 
 <template>
-  <div class="subscription-detail" v-if="subscription">
+  <div v-if="subscription" class="subscription-detail">
     <div v-if="loadingAction" class="spinner-overlay" aria-live="polite" aria-busy="true">
       <div class="spinner"></div>
     </div>
@@ -29,11 +29,11 @@
       <div class="detail-row"><strong>Next Billing:</strong> {{ subscription.next_billing || 'N/A' }}</div>
       <div class="detail-row"><strong>Payment Status:</strong> <span :class="['payment-badge', subscription.payment_status]">{{ subscription.payment_status || 'N/A' }}</span>
         <button v-if="subscription.payment_status === 'failed'" @click="retryPayment" :disabled="loadingAction === 'retry-payment'" title="Retry Payment"><span class="icon">🔄</span></button>
-      <button v-if="subscription.payment_status === 'failed'" @click="retryPayment" :disabled="loadingAction === 'retry-payment'" title="Retry Payment"><span class="icon">🔄</span></button>  </div>
+      </div>
       <div class="detail-row"><strong>User:</strong> <a href="#" @click.prevent="showUserInfo" title="View user info">View</a></div>
     </section>
     <section class="section-actions">
-      <!-- No UI change needed here for cancelSubscription, as it's already handled in the modal and actions. -->   <h4>Actions</h4>
+      <h4>Actions</h4>
       <div class="actions">
         <button type="button" :disabled="loadingAction === 'start-trial'" @click="onStartTrial" aria-label="Start trial for this subscription" title="Start a trial for this user"><span class="icon">🚀</span> <span v-if="loadingAction === 'start-trial'">Starting...</span><span v-else>Start Trial</span></button>
         <button type="button" :disabled="loadingAction === 'convert'" @click="onConvert" aria-label="Convert trial to paid" title="Convert trial to paid"><span class="icon">💳</span> <span v-if="loadingAction === 'convert'">Converting...</span><span v-else>Convert to Paid</span></button>
@@ -74,14 +74,11 @@
   </div>
 </template>
 
-
-
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
-import type { PropType } from 'vue';
+<script setup lang="ts">
+import { ref, defineProps, defineEmits, watch } from 'vue';
 import * as subscriptionApi from '../../../api/subscriptionApi';
 
-export interface Subscription {
+interface Subscription {
   id: number;
   plan: string;
   status: string;
@@ -95,193 +92,203 @@ export interface Subscription {
   [key: string]: any;
 }
 
-export default defineComponent({
-  name: 'SubscriptionDetail',
-  props: {
-    subscription: {
-      type: Object as PropType<Subscription>,
-      required: false,
-      default: null,
-      validator: (sub: Subscription) => sub == null || (typeof sub === 'object' && 'id' in sub && 'plan' in sub && 'status' in sub)
-    },
-    userRole: {
-      type: String,
-      required: false,
-      default: 'user'
-    }
-  },
-  setup(props, { emit }) {
-    const loadingAction = ref<string | null>(null);
-    const feedback = ref<{ message: string; type: 'success' | 'error' | '' }>({ message: '', type: '' });
-    const editingPlan = ref(false);
-    const editedPlan = ref(props.subscription?.plan || 'standard');
-    const showCancelDialog = ref(false);
-    const showUserModal = ref(false);
-    const showHistory = ref(false);
+interface Feedback {
+  message: string;
+  type: 'success' | 'error' | '';
+}
+type AsyncFn<T = any> = () => Promise<T>;
 
-    function showFeedback(message: string, type: 'success' | 'error' = 'success') {
-      feedback.value = { message, type };
-      setTimeout(() => { feedback.value = { message: '', type: '' }; }, 3000);
-    }
+const props = defineProps<{ subscription: Subscription | null }>();
+const emit = defineEmits(['updated']);
 
-    function startPlanEdit() {
-      editingPlan.value = true;
-      editedPlan.value = props.subscription?.plan || 'standard';
-    }
-    function cancelPlanEdit() {
-      editingPlan.value = false;
-    }
-    async function savePlanEdit() {
-      if (!props.subscription?.id) return;
-      loadingAction.value = 'edit-plan';
-      try {
-        // Assume an API endpoint for plan update
-        await subscriptionApi.updatePlan(props.subscription.id, editedPlan.value);
-        showFeedback('Plan updated successfully.');
-        emit('updated');
-        editingPlan.value = false;
-      } catch (e: any) {
-        showFeedback(e?.response?.data?.message || 'Failed to update plan.', 'error');
-      } finally {
+const loadingAction = ref<string | null>(null);
+let loadingTimeout: number | null = null;
+// Watch loadingAction and set a timeout to clear it after 8 seconds
+watch(loadingAction, (val) => {
+  if (val) {
+    if (loadingTimeout) clearTimeout(loadingTimeout);
+    loadingTimeout = window.setTimeout(() => {
+      if (loadingAction.value) {
         loadingAction.value = null;
+        showFeedback('Request timed out. Please try again.', 'error');
       }
-    }
-
-    async function retryPayment() {
-      if (!props.subscription?.id) return;
-      loadingAction.value = 'retry-payment';
-      try {
-        await subscriptionApi.retryPayment(props.subscription.id);
-        showFeedback('Payment retried.');
-        emit('updated');
-      } catch (e: any) {
-        showFeedback(e?.response?.data?.message || 'Failed to retry payment.', 'error');
-      } finally {
-        loadingAction.value = null;
-      }
-    }
-
-    function showUserInfo() {
-      showUserModal.value = true;
-    }
-
-    function toggleHistory() {
-      showHistory.value = !showHistory.value;
-    }
-
-    function confirmCancel() {
-      showCancelDialog.value = true;
-    }
-    async function cancelSubscription() {
-      if (!props.subscription?.id) return;
-      loadingAction.value = 'cancel';
-      try {
-        await subscriptionApi.cancelSubscription(props.subscription.id);
-        showFeedback('Subscription cancelled.');
-        emit('updated');
-        showCancelDialog.value = false;
-      } catch (e: any) {
-        showFeedback(e?.response?.data?.message || 'Failed to cancel subscription.', 'error');
-      } finally {
-        loadingAction.value = null;
-      }
-    }
-
-    async function onStartTrial() {
-      if (!props.subscription?.user_id) return;
-      loadingAction.value = 'start-trial';
-      try {
-        await subscriptionApi.startTrial(props.subscription.user_id);
-        showFeedback('Trial started successfully.');
-        emit('updated');
-      } catch (e: any) {
-        showFeedback(e?.response?.data?.message || 'Failed to start trial.', 'error');
-      } finally {
-        loadingAction.value = null;
-      }
-    }
-
-    async function onConvert() {
-      if (!props.subscription?.id) return;
-      loadingAction.value = 'convert';
-      try {
-        await subscriptionApi.convertTrialToPaid(props.subscription.id);
-        showFeedback('Converted to paid successfully.');
-        emit('updated');
-      } catch (e: any) {
-        showFeedback(e?.response?.data?.message || 'Failed to convert.', 'error');
-      } finally {
-        loadingAction.value = null;
-      }
-    }
-
-    async function onRenew() {
-      if (!props.subscription?.id) return;
-      loadingAction.value = 'renew';
-      try {
-        await subscriptionApi.renewSubscription(props.subscription.id);
-        showFeedback('Renewed successfully.');
-        emit('updated');
-      } catch (e: any) {
-        showFeedback(e?.response?.data?.message || 'Failed to renew.', 'error');
-      } finally {
-        loadingAction.value = null;
-      }
-    }
-
-    async function onHandleExpiry() {
-      if (!props.subscription?.id) return;
-      loadingAction.value = 'handle-expiry';
-      try {
-        await subscriptionApi.handleExpiry(props.subscription.id);
-        showFeedback('Expiry handled successfully.');
-        emit('updated');
-      } catch (e: any) {
-        showFeedback(e?.response?.data?.message || 'Failed to handle expiry.', 'error');
-      } finally {
-        loadingAction.value = null;
-      }
-    }
-
-    async function onCheckGrace() {
-      if (!props.subscription?.id) return;
-      loadingAction.value = 'check-grace';
-      try {
-        const res = await subscriptionApi.isInGracePeriod(props.subscription.id);
-        const inGrace = res?.data?.in_grace;
-        showFeedback(inGrace ? 'Subscription is in grace period.' : 'Not in grace period.');
-      } catch (e: any) {
-        showFeedback(e?.response?.data?.message || 'Failed to check grace period.', 'error');
-      } finally {
-        loadingAction.value = null;
-      }
-    }
-
-    return {
-      loadingAction,
-      feedback,
-      editingPlan,
-      editedPlan,
-      showCancelDialog,
-      showUserModal,
-      showHistory,
-      startPlanEdit,
-      cancelPlanEdit,
-      savePlanEdit,
-      retryPayment,
-      showUserInfo,
-      toggleHistory,
-      confirmCancel,
-      cancelSubscription,
-      onStartTrial,
-      onConvert,
-      onRenew,
-      onHandleExpiry,
-      onCheckGrace
-    };
+    }, 8000);
+  } else {
+    if (loadingTimeout) clearTimeout(loadingTimeout);
+    loadingTimeout = null;
   }
 });
+const feedback = ref<Feedback>({ message: '', type: '' });
+const editingPlan = ref<boolean>(false);
+const editedPlan = ref<string>(props.subscription?.plan || 'standard');
+const showCancelDialog = ref<boolean>(false);
+const showUserModal = ref<boolean>(false);
+const showHistory = ref<boolean>(false);
+
+function showFeedback(message: string, type: 'success' | 'error' | '' = 'success') {
+  feedback.value = { message, type };
+  setTimeout(() => (feedback.value = { message: '', type: '' }), 3500);
+}
+
+function showUserInfo(): void {
+  showUserModal.value = true;
+}
+
+function toggleHistory(): void {
+  showHistory.value = !showHistory.value;
+}
+
+function confirmCancel(): void {
+  showCancelDialog.value = true;
+}
+
+async function withRetry<T>(fn: AsyncFn<T>, maxTries = 3, timeoutMs = 8000): Promise<T> {
+  let lastError: any;
+  for (let attempt = 1; attempt <= maxTries; attempt++) {
+    try {
+      return await Promise.race([
+        fn(),
+        new Promise<T>((_, reject) => setTimeout(() => reject(new Error('Request timed out')), timeoutMs))
+      ]);
+    } catch (e) {
+      lastError = e;
+      if (attempt < maxTries) {
+        await new Promise(res => setTimeout(res, 500));
+      }
+    }
+  }
+  throw lastError;
+}
+
+async function cancelSubscription(): Promise<void> {
+  if (!props.subscription?.id) return;
+  loadingAction.value = 'cancel';
+  try {
+    await withRetry(() => subscriptionApi.cancelSubscription(props.subscription!.id));
+    showFeedback('Subscription cancelled.');
+    emit('updated');
+    showCancelDialog.value = false;
+  } catch (e: any) {
+    showFeedback(e?.response?.data?.message || e?.message || 'Failed to cancel subscription.', 'error');
+  } finally {
+    loadingAction.value = null;
+  }
+}
+
+async function onStartTrial(): Promise<void> {
+  if (typeof props.subscription?.user_id !== 'number') return;
+  loadingAction.value = 'start-trial';
+  try {
+    await withRetry(() => subscriptionApi.startTrial(props.subscription!.user_id as number));
+    showFeedback('Trial started successfully.');
+    emit('updated');
+  } catch (e: any) {
+    showFeedback(e?.response?.data?.message || e?.message || 'Failed to start trial.', 'error');
+  } finally {
+    loadingAction.value = null;
+  }
+}
+
+
+async function onConvert() {
+  const subscription = props.subscription;
+  if (!subscription || !subscription.id) return;
+  loadingAction.value = 'convert';
+  try {
+    await withRetry(() => subscriptionApi.convertTrialToPaid(subscription.id));
+    showFeedback('Converted to paid successfully.');
+    emit('updated');
+  } catch (e: any) {
+    showFeedback(e?.response?.data?.message || e?.message || 'Failed to convert.', 'error');
+  } finally {
+    loadingAction.value = null;
+  }
+}
+
+
+async function onRenew() {
+  const subscription = props.subscription;
+  if (!subscription || !subscription.id) return;
+  loadingAction.value = 'renew';
+  try {
+    await withRetry(() => subscriptionApi.renewSubscription(subscription.id));
+    showFeedback('Renewed successfully.');
+    emit('updated');
+  } catch (e: any) {
+    showFeedback(e?.response?.data?.message || e?.message || 'Failed to renew.', 'error');
+  } finally {
+    loadingAction.value = null;
+  }
+}
+
+
+async function onHandleExpiry() {
+  const subscription = props.subscription;
+  if (!subscription || !subscription.id) return;
+  loadingAction.value = 'handle-expiry';
+  try {
+    await withRetry(() => subscriptionApi.handleExpiry(subscription.id));
+    showFeedback('Expiry handled successfully.');
+    emit('updated');
+  } catch (e: any) {
+    showFeedback(e?.response?.data?.message || e?.message || 'Failed to handle expiry.', 'error');
+  } finally {
+    loadingAction.value = null;
+  }
+}
+
+
+async function onCheckGrace() {
+  const subscription = props.subscription;
+  if (!subscription || !subscription.id) return;
+  loadingAction.value = 'check-grace';
+  try {
+    const res = await withRetry(() => subscriptionApi.isInGracePeriod(subscription.id));
+    const inGrace = res?.data?.in_grace;
+    showFeedback(inGrace ? 'Subscription is in grace period.' : 'Not in grace period.');
+  } catch (e: any) {
+    showFeedback(e?.response?.data?.message || e?.message || 'Failed to check grace period.', 'error');
+  } finally {
+    loadingAction.value = null;
+  }
+}
+
+function startPlanEdit() {
+  editingPlan.value = true;
+  editedPlan.value = props.subscription?.plan || 'standard';
+}
+
+function cancelPlanEdit() {
+  editingPlan.value = false;
+}
+
+async function savePlanEdit() {
+  if (!props.subscription?.id) return;
+  loadingAction.value = 'edit-plan';
+  try {
+    await withRetry(() => subscriptionApi.updatePlan(props.subscription!.id, editedPlan.value));
+    showFeedback('Plan updated.');
+    emit('updated');
+    editingPlan.value = false;
+  } catch (e: any) {
+    showFeedback(e?.response?.data?.message || e?.message || 'Failed to update plan.', 'error');
+  } finally {
+    loadingAction.value = null;
+  }
+}
+
+async function retryPayment() {
+  if (!props.subscription?.id) return;
+  loadingAction.value = 'retry-payment';
+  try {
+    await withRetry(() => subscriptionApi.retryPayment(props.subscription!.id));
+    showFeedback('Payment retried.');
+    emit('updated');
+  } catch (e: any) {
+    showFeedback(e?.response?.data?.message || e?.message || 'Failed to retry payment.', 'error');
+  } finally {
+    loadingAction.value = null;
+  }
+}
 </script>
-
-
 <style src="./SubscriptionDetail.css"></style>

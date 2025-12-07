@@ -1,0 +1,48 @@
+
+# requirements.txt for my_app
+
+# Core web and DB
+flask
+sqlalchemy
+alembic
+psycopg2
+
+# Security and Auth
+passlib
+jwt
+
+# Data validation
+pydantic
+
+# Caching
+redis
+
+# HTTP requests
+requests
+
+# Testing
+pytest
+
+
+# Utilities
+python-dotenv
+
+# Other (used in code)
+blinker
+itsdangerous
+jinja2
+mako
+markupsafe
+colorama
+greenlet
+werkzeug
+
+# If you use any of these in your code, uncomment as needed:
+# base64
+# hmac
+# hashlib
+# json
+# secrets
+# datetime
+# logging
+# typing-extensions
