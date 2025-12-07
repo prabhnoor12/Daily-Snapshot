@@ -11,15 +11,25 @@
       </div>
       <div v-if="error" class="alert alert-error">{{ error }}</div>
       <div v-if="feedback" class="alert alert-success">{{ feedback }}</div>
-      <div class="card-wrapper">
-        <SubscriptionDetail
-          v-if="selectedSubscription"
-          :subscription="selectedSubscription"
-          @updated="handleUpdated"
-        />
-        <div v-else class="empty-card">
-          <div class="skeleton-loader"></div>
-          <p>No subscription selected.</p>
+      <div class="tabs-wrapper">
+        <div class="tabs improved-tabs">
+          <button :class="{active: activeTab === 'form'}" @click="activeTab = 'form'">Get Started</button>
+          <button :class="{active: activeTab === 'details'}" @click="activeTab = 'details'">Subscription Details</button>
+        </div>
+        <div class="tab-content">
+          <transition name="fade" mode="out-in">
+            <SubscriptionForm
+              v-if="activeTab === 'form'"
+              @submit="handleFormSubmit"
+              key="form"
+            />
+            <SubscriptionDetail
+              v-else-if="activeTab === 'details' && selectedSubscription"
+              :subscription="selectedSubscription"
+              @updated="handleUpdated"
+              key="details"
+            />
+          </transition>
         </div>
       </div>
     </main>
@@ -29,12 +39,14 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
 import SubscriptionDetail from '../components/SubscriptionDetail.vue';
+import SubscriptionForm from '../components/SubscriptionForm.vue';
 import * as subscriptionApi from '../../../api/subscriptionApi';
 
 export default defineComponent({
   name: 'SubscriptionPage',
   components: {
-    SubscriptionDetail
+    SubscriptionDetail,
+    SubscriptionForm
   },
   setup() {
     const subscriptions = ref<any[]>([]);
@@ -42,6 +54,8 @@ export default defineComponent({
     const loading = ref(false);
     const error = ref('');
     const feedback = ref('');
+
+    const activeTab = ref<'details' | 'form'>('details');
 
     async function fetchSubscriptions() {
       loading.value = true;
@@ -105,6 +119,13 @@ if (!didTimeout) {
       fetchSubscriptions();
     }
 
+    function handleFormSubmit() {
+      feedback.value = 'Subscription started!';
+      // You can add logic here to actually start the subscription via API
+      activeTab.value = 'details';
+      fetchSubscriptions();
+    }
+
     onMounted(fetchSubscriptions);
 
     return {
@@ -112,10 +133,49 @@ if (!didTimeout) {
       handleUpdated,
       loading,
       error,
-      feedback
+      feedback,
+      activeTab,
+      handleFormSubmit
     };
   }
 });
 </script>
 <style src="./subscriptionPage.css"></style>
+<style>
+.improved-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  background: #f7f7fa;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.improved-tabs button {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  color: #333;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.improved-tabs button.active {
+  background: #0052cc;
+  color: #fff;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0,82,204,0.08);
+}
+.improved-tabs button:not(.active):hover {
+  background: #e3e8f0;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+</style>
 
