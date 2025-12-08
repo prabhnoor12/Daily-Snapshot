@@ -52,7 +52,13 @@
     <div v-if="showUserModal" class="modal-overlay" role="dialog" aria-modal="true">
       <div class="modal">
         <h4>User Info</h4>
-        <pre>{{ subscription.user_info || 'No user info available.' }}</pre>
+        <div v-if="userInfoLoading">Loading user info...</div>
+        <div v-else-if="userInfoError">{{ userInfoError }}</div>
+        <div v-else-if="userInfo">
+          <pre>{{ userInfo }}</pre>
+          <div><strong>Status:</strong> {{ userInfo.status || 'N/A' }}</div>
+        </div>
+        <div v-else>No user info available.</div>
         <button @click="showUserModal = false">Close</button>
       </div>
     </div>
@@ -72,6 +78,7 @@ import {
   handleExpiry,
   isInGracePeriod
 } from '../../../api/subscriptionApi';
+import { getUserInfo } from '../../../api/userApi';
 
 interface Subscription {
   id: number;
@@ -118,6 +125,9 @@ const feedback = ref<Feedback>({ message: '', type: '' });
 const showCancelDialog = ref<boolean>(false);
 const showUserModal = ref<boolean>(false);
 const showHistory = ref<boolean>(false);
+const userInfo = ref<any>(null);
+const userInfoLoading = ref(false);
+const userInfoError = ref('');
 
 function showFeedback(message: string, type: 'success' | 'error' | '' = 'success') {
   feedback.value = { message, type };
@@ -125,7 +135,26 @@ function showFeedback(message: string, type: 'success' | 'error' | '' = 'success
 }
 
 function showUserInfo(): void {
+  userInfo.value = null;
+  userInfoError.value = '';
+  userInfoLoading.value = true;
   showUserModal.value = true;
+  const userId = props.subscription?.user_id;
+  if (typeof userId === 'number') {
+    getUserInfo(userId)
+      .then(res => {
+        userInfo.value = res.data;
+      })
+      .catch(e => {
+        userInfoError.value = e?.response?.data?.message || e?.message || 'Failed to fetch user info.';
+      })
+      .finally(() => {
+        userInfoLoading.value = false;
+      });
+  } else {
+    userInfoError.value = 'No user ID available.';
+    userInfoLoading.value = false;
+  }
 }
 
 function toggleHistory(): void {

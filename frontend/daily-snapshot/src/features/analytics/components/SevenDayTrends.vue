@@ -82,10 +82,32 @@ async function fetchData() {
 	try {
 		const res = await get7DayTrendCharts(props.shopId);
 		let d = res?.data || res;
-		if (!d || typeof d !== 'object' || !Array.isArray(d.dates) || !Array.isArray(d.sales) || !Array.isArray(d.orders) || !Array.isArray(d.visitors)) {
-			throw new Error('Unexpected response format.');
+		if (
+			d && typeof d === 'object' &&
+			Array.isArray(d.dates) &&
+			Array.isArray(d.sales) &&
+			Array.isArray(d.orders) &&
+			Array.isArray(d.visitors)
+		) {
+			data.value = d;
+		} else if (
+			d && typeof d === 'object' &&
+			Array.isArray(d.labels) &&
+			Array.isArray(d.sales) &&
+			Array.isArray(d.orders) &&
+			Array.isArray(d.visitors)
+		) {
+			// Accept 'labels' as dates
+			data.value = {
+				dates: d.labels,
+				sales: d.sales,
+				orders: d.orders,
+				visitors: d.visitors
+			};
+		} else {
+			data.value = null;
+			throw new Error('Unexpected response format: ' + JSON.stringify(d));
 		}
-		data.value = d;
 	} catch (e: any) {
 		error.value = e?.message || 'Failed to fetch data.';
 		data.value = null;

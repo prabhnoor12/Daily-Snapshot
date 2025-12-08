@@ -44,13 +44,18 @@ async function fetchVisitors() {
 	try {
 		const res = await getRealTimeVisitorCount(props.shopId);
 		let v = res?.data ?? res;
-		if (typeof v === 'object' && v !== null && 'live_visitors' in v) {
-			visitors.value = v.live_visitors;
+		if (typeof v === 'object' && v !== null) {
+			// Accept both snake_case and camelCase keys
+			const liveVisitors = v.live_visitors ?? v.liveVisitors ?? v.visitors ?? null;
+			visitors.value = typeof liveVisitors === 'number' ? liveVisitors : null;
 			if (Array.isArray(v.trend) && Array.isArray(v.trendLabels)) {
 				visitorTrend.value = v.trend;
 				visitorTrendLabels.value = v.trendLabels;
+			} else if (Array.isArray(v.trend) && v.trend.length) {
+				visitorTrend.value = v.trend;
+				visitorTrendLabels.value = Array(v.trend.length).fill('');
 			} else {
-				visitorTrend.value = [v.live_visitors];
+				visitorTrend.value = [visitors.value ?? 0];
 				visitorTrendLabels.value = ['Now'];
 			}
 		} else if (typeof v === 'number') {
@@ -58,7 +63,11 @@ async function fetchVisitors() {
 			visitorTrend.value = [v];
 			visitorTrendLabels.value = ['Now'];
 		} else {
-			throw new Error('Unexpected response format.');
+			// Fallback for unexpected format
+			visitors.value = null;
+			visitorTrend.value = [];
+			visitorTrendLabels.value = [];
+			throw new Error('Unexpected response format: ' + JSON.stringify(v));
 		}
 	} catch (e: any) {
 		error.value = e?.message || 'Failed to fetch visitor count.';
