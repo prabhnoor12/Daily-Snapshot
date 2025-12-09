@@ -37,7 +37,12 @@ markupsafe
 colorama
 greenlet
 werkzeug
-
+reportlab
+xlsxwriter
+numpy
+scipy
+gspread
+oauth2client
 # If you use any of these in your code, uncomment as needed:
 # base64
 # hmac

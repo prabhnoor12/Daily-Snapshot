@@ -10,6 +10,9 @@ class DailyAnalyticsBase(BaseModel):
     aov: float
     live_visitors: Optional[int] = None
     top_product: Optional[str] = None
+    region: Optional[str] = None
+    device: Optional[str] = None
+    customer_type: Optional[str] = None
     created_at: Optional[datetime] = None
 
 class DailyAnalyticsCreate(DailyAnalyticsBase):

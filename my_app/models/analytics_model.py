@@ -13,4 +13,7 @@ class DailyAnalytics(Base):
     aov = Column(Float, nullable=False)
     live_visitors = Column(Integer, nullable=True)
     top_product = Column(String, nullable=True)
+    region = Column(String, nullable=True)
+    device = Column(String, nullable=True)
+    customer_type = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
