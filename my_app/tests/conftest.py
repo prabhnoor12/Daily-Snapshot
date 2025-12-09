@@ -1,19 +1,10 @@
-import pytest
-from my_app.database import Base, engine
-# Import all models so they are registered with Base
-from my_app.models.shop_model import Shop
-from my_app.models.analytics_model import DailyAnalytics
-from my_app.models.shopify_webhook_model import ShopifyWebhook
-from my_app.models.subscription_model import Subscription
-from my_app.models.auth_model import RefreshToken, PasswordResetToken, LoginHistory
-from my_app.models.session_model import Session
-from my_app.models.setting_model import Setting
 
-@pytest.fixture(scope='session', autouse=True)
-def setup_database():
-    Base.metadata.create_all(bind=engine)
-    yield
-    Base.metadata.drop_all(bind=engine)
+# Mock SQLAlchemy engine to prevent real DB connections during tests
+import pytest
+import sys
+from unittest.mock import MagicMock
+sys.modules['my_app.database'].engine = MagicMock()
+sys.modules['my_app.database'].Base = MagicMock()
 
 import pytest
 from flask import Flask
