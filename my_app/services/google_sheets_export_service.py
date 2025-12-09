@@ -6,9 +6,17 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 def export_to_google_sheets(data):
     """
-    Export analytics data to Google Sheets using gspread.
+    Export analytics data to Google Sheets using gspread, with customizable columns and filters.
     Args:
-        data (dict): {"sheet_name": str, "headers": list, "rows": list, "credentials_path": str}
+        data (dict): {
+            "sheet_name": str,
+            "headers": list,
+            "rows": list,
+            "credentials_path": str,
+            "user_email": str (optional),
+            "columns": list (optional),
+            "filters": dict (optional)
+        }
     Returns:
         dict: Export result
     """
@@ -17,8 +25,26 @@ def export_to_google_sheets(data):
         headers = data.get("headers", [])
         rows = data.get("rows", [])
         credentials_path = data.get("credentials_path")
+        user_email = data.get("user_email")
+        columns = data.get("columns")  # List of columns to export
+        filters = data.get("filters")   # Dict of filters to apply to rows
         if not credentials_path:
             return error_response("Google API credentials path required", status_code=400)
+        # Apply column selection
+        if columns:
+            headers = [h for h in headers if h in columns]
+            rows = [[row[headers.index(h)] for h in headers] for row in rows]
+        # Apply filters
+        if filters:
+            def row_matches(row_dict):
+                return all(row_dict.get(k) == v for k, v in filters.items())
+            # Convert rows to dict for filtering
+            filtered_rows = []
+            for row in rows:
+                row_dict = dict(zip(headers, row))
+                if row_matches(row_dict):
+                    filtered_rows.append(row)
+            rows = filtered_rows
         scope = [
             'https://spreadsheets.google.com/feeds',
             'https://www.googleapis.com/auth/drive'
@@ -29,7 +55,6 @@ def export_to_google_sheets(data):
         sheet = client.create(sheet_name)
         worksheet = sheet.get_worksheet(0)
         # Share with user's email if provided
-        user_email = data.get("user_email")
         if user_email:
             sheet.share(user_email, perm_type='user', role='writer')
         # Write headers and rows
