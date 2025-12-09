@@ -1,10 +1,17 @@
 
+
 # Mock SQLAlchemy engine to prevent real DB connections during tests
 import pytest
 import sys
 from unittest.mock import MagicMock
-sys.modules['my_app.database'].engine = MagicMock()
-sys.modules['my_app.database'].Base = MagicMock()
+import types
+from my_app.database import Base  # Import the real Base
+
+mock_db_module = types.ModuleType("my_app.database")
+mock_db_module.engine = MagicMock()
+mock_db_module.SessionLocal = MagicMock()
+mock_db_module.Base = Base  # Use the real Base
+sys.modules["my_app.database"] = mock_db_module
 
 import pytest
 from flask import Flask
