@@ -158,18 +158,22 @@ def handle_shopify_callback(request_args, session):
 	finally:
 		db.close()
 
-	# Optionally, store user info if available (Shopify only provides shop owner email)
-	# If you want to create a user record:
-	# from ..crud.user_crud import create_user
-	# user_data = {
-	#     'name': shop_data.get('shop_owner'),
-	#     'email': shop_data.get('email'),
-	#     'hashed_password': '',  # No password from Shopify
-	# }
-	# db = SessionLocal()
-	# try:
-	#     create_user(db, user_data)
-	# finally:
-	#     db.close()
+
+	# Create a user for the shop owner if not already present
+	from ..crud.user_crud import get_user_by_email, create_user
+	from ..schemas.user_schema import UserCreate
+	user_email = shop_data.get('email')
+	user_name = shop_data.get('shop_owner') or shop_data.get('name') or 'Shopify User'
+	db = SessionLocal()
+	try:
+		existing_user = get_user_by_email(db, user_email)
+		if not existing_user:
+			# Use a random password since Shopify does not provide one
+			import secrets
+			random_password = secrets.token_urlsafe(16)
+			user_create = UserCreate(name=user_name, email=user_email, password=random_password)
+			create_user(db, user_create)
+	finally:
+		db.close()
 
 	return {'shop': shop, 'access_token': access_token, 'shop_info': shop_data}, 200
