@@ -1,0 +1,13 @@
+.arima-list {
+  padding-left: 1.2em;
+  color: #6a1b9a;
+}
+.arima-list li {
+  margin-bottom: 4px;
+}
+.confidence-intervals {
+  background: #f3e5f5;
+  border-radius: 6px;
+  padding: 0.5em;
+  margin-top: 1em;
+}

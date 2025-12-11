@@ -1,0 +1,7 @@
+.sales-warnings {
+  color: #b71c1c;
+  padding-left: 1.2em;
+}
+.sales-warnings li {
+  margin-bottom: 4px;
+}
