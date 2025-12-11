@@ -1,0 +1,8 @@
+.metrics-list {
+  list-style: none;
+  padding: 0;
+}
+.metrics-list li {
+  margin-bottom: 6px;
+  font-size: 1rem;
+}

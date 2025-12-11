@@ -1,0 +1,12 @@
+.dashboard-summary {
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 1em;
+  margin-bottom: 1em;
+}
+.dashboard-summary ul {
+  padding-left: 1.2em;
+}
+.dashboard-summary li {
+  margin-bottom: 6px;
+}

@@ -1,0 +1,9 @@
+.trend-summary {
+  background: #e3f2fd;
+  border-radius: 8px;
+  padding: 1em;
+  margin-bottom: 1em;
+}
+.trend-summary strong {
+  color: #1976d2;
+}

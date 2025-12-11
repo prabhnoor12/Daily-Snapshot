@@ -1,0 +1,13 @@
+.correlation-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1em;
+}
+.correlation-table th, .correlation-table td {
+  border: 1px solid #bdbdbd;
+  padding: 0.5em 0.8em;
+  text-align: left;
+}
+.correlation-table th {
+  background: #e0e0e0;
+}

@@ -1,0 +1,7 @@
+.recommendations-list {
+  padding-left: 1.2em;
+  color: #388e3c;
+}
+.recommendations-list li {
+  margin-bottom: 4px;
+}

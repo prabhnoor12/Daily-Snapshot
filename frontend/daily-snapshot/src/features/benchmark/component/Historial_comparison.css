@@ -1,0 +1,11 @@
+.milestone-block {
+  background: #f3e5f5;
+  border: 1px solid #ce93d8;
+  border-radius: 6px;
+  margin-bottom: 1em;
+  padding: 0.8em;
+}
+.milestone-block h4 {
+  margin: 0 0 0.5em 0;
+  color: #8e24aa;
+}

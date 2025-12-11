@@ -1,0 +1,7 @@
+.warnings-list {
+  color: #b71c1c;
+  padding-left: 1.2em;
+}
+.warnings-list li {
+  margin-bottom: 4px;
+}
