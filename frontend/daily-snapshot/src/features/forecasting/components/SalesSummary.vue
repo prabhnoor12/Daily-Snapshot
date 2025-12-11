@@ -10,7 +10,7 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { getSalesSummary } from '@/api/forecastingApi';
+import { getSalesSummary } from '../../../api/forecastingApi';
 import './SalesSummary.css';
 
 const props = defineProps<{ shopId: number, segment?: string }>();

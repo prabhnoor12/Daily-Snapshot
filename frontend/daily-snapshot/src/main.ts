@@ -10,13 +10,16 @@ import Home from './features/Home.vue';
 import Analytics from './features/analytics/page/analytics.vue';
 import Settings from './features/settings/page/settingPage.vue';
 import Subscription from './features/subscription/page/subscriptionPage.vue';
-
+import BenchMark from './features/benchmark/page/benchmarkPage.vue';
+import Forecast from '.features/forecasting/page/forecastPage.vue';
 const routes = [
 	{ path: '/', component: Home },
 	{ path: '/auth', component: AuthPage },
 	{ path: '/analytics', component: Analytics },
+	{ path: '/benchmark', component: BenchMark },
 	{ path: '/settings', component: Settings },
 	{ path: '/subscription', component: Subscription },
+    {path: '/forecast', component: Forecast },
 	{ path: '/:pathMatch(.*)*', redirect: '/' }, // catch-all
 ];
 

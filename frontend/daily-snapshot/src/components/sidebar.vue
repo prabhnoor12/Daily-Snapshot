@@ -21,6 +21,18 @@
           </button>
         </li>
         <li>
+          <button @click="navigateAndClose('/forecasting')">
+            <span class="sidebar-icon"><Icon icon="mdi:chart-line-variant" /></span>
+            Forecasting
+          </button>
+        </li>
+        <li>
+          <button @click="navigateAndClose('/benchmark')">
+            <span class="sidebar-icon"><Icon icon="mdi:trophy-outline" /></span>
+            Benchmark
+          </button>
+        </li>
+        <li>
           <button @click="navigateAndClose('/settings')">
             <span class="sidebar-icon"><Icon icon="mdi:cog" /></span>
             Settings
