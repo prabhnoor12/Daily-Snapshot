@@ -11,7 +11,7 @@ import Analytics from './features/analytics/page/analytics.vue';
 import Settings from './features/settings/page/settingPage.vue';
 import Subscription from './features/subscription/page/subscriptionPage.vue';
 import BenchMark from './features/benchmark/page/benchmarkPage.vue';
-import Forecast from '.features/forecasting/page/forecastPage.vue';
+import Forecast from './features/forecasting/page/forecastingPage.vue';
 const routes = [
 	{ path: '/', component: Home },
 	{ path: '/auth', component: AuthPage },
@@ -19,7 +19,7 @@ const routes = [
 	{ path: '/benchmark', component: BenchMark },
 	{ path: '/settings', component: Settings },
 	{ path: '/subscription', component: Subscription },
-    {path: '/forecast', component: Forecast },
+	{path: '/forecasting', component: Forecast },
 	{ path: '/:pathMatch(.*)*', redirect: '/' }, // catch-all
 ];
 

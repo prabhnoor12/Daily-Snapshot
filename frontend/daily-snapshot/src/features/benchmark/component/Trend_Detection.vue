@@ -1,10 +1,19 @@
+
 <template>
-	<div>
-		<h3>Trend Detection</h3>
-		<div v-if="loading">Loading...</div>
-		<div v-else-if="error">{{ error }}</div>
+	<section class="trend-detection-section" aria-labelledby="trend-detection-title">
+		<h3 id="trend-detection-title">Trend Detection</h3>
+		<div v-if="loading" class="trend-loading" role="status" aria-live="polite">
+			<span class="spinner" aria-hidden="true"></span> Loading...
+		</div>
+		<div v-else-if="error" class="trend-error" role="alert">
+			{{ error }}
+			<button @click="fetchSummary" class="retry-btn">Retry</button>
+		</div>
 		<div v-else>
-			<div v-if="summary">
+			<div v-if="!summary" class="trend-empty" role="status">
+				<em>No trend data available.</em>
+			</div>
+			<div v-else>
 				<div>
 					<strong>Improved Metrics:</strong>
 					<span v-if="summary.improved_metrics && summary.improved_metrics.length">
@@ -26,11 +35,8 @@
 					</span>
 				</div>
 			</div>
-			<div v-else>
-				<em>No trend data available.</em>
-			</div>
 		</div>
-	</div>
+	</section>
 </template>
 
 <script setup lang="ts">
@@ -38,19 +44,95 @@ import { ref, onMounted } from 'vue';
 import { getSummary } from '../../../api/benchmarkApi';
 
 const props = defineProps<{ shopId: number }>();
-const summary = ref<any>(null);
+
+interface TrendSummary {
+  improved_metrics: string[];
+  declined_metrics: string[];
+  date_range: string[];
+}
+
+const summary = ref<TrendSummary | null>(null);
 const loading = ref(false);
 const error = ref<string | null>(null);
 
-onMounted(async () => {
+
+function sanitizeError(err: any): string {
+	const msg = err?.message || err?.toString() || '';
+	if (typeof msg === 'string' && /<\/?[a-z][\s\S]*>/i.test(msg)) {
+		return 'Failed to load trend data (server error).';
+	}
+	return msg || 'Failed to load trend data.';
+}
+
+async function fetchSummary() {
 	loading.value = true;
+	error.value = null;
 	try {
-		summary.value = await getSummary(props.shopId);
+		const result = await getSummary(props.shopId);
+		if (result && typeof result === 'object' && !Array.isArray(result)) {
+			summary.value = result;
+		} else {
+			error.value = 'No valid trend summary data received.';
+			summary.value = null;
+		}
 	} catch (e: any) {
-		error.value = e?.message || 'Failed to load trend data.';
+		error.value = sanitizeError(e);
+		summary.value = null;
 	} finally {
 		loading.value = false;
 	}
-});
+}
+
+onMounted(fetchSummary);
 </script>
-import './Trend_Detection.css';
+<style scoped>
+.trend-detection-section {
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+	padding: 1.5rem;
+	margin: 1rem 0;
+}
+.trend-detection-section h3 {
+	margin-bottom: 1rem;
+}
+.trend-loading {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	color: #888;
+}
+.spinner {
+	width: 1em;
+	height: 1em;
+	border: 2px solid #ccc;
+	border-top: 2px solid #007bff;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+	display: inline-block;
+}
+@keyframes spin {
+	to { transform: rotate(360deg); }
+}
+.trend-error {
+	color: #b00020;
+	margin-bottom: 1rem;
+}
+.retry-btn {
+	margin-left: 1rem;
+	background: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	padding: 0.25rem 0.75rem;
+	cursor: pointer;
+	font-size: 0.95em;
+}
+.retry-btn:hover {
+	background: #0056b3;
+}
+.trend-empty {
+	color: #888;
+	font-style: italic;
+}
+</style>

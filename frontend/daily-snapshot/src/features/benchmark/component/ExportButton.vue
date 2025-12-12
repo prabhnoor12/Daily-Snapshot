@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { exportBenchmarking } from '@/api/benchmarkApi';
+import { exportBenchmarking } from '../../../api/benchmarkApi';
 import './ExportButton.css';
 
 const props = defineProps<{ shopId: number }>();
@@ -21,7 +21,12 @@ async function download(format: 'pdf' | 'excel') {
   error.value = null;
   try {
     const response = await exportBenchmarking(props.shopId, format);
-    const blob = new Blob([response.data], { type: response.headers['content-type'] });
+    const contentType = response.headers['content-type'];
+    if (!contentType || !(contentType.includes('pdf') || contentType.includes('excel') || contentType.includes('sheet'))) {
+      error.value = 'No valid export data received.';
+      return;
+    }
+    const blob = new Blob([response.data], { type: contentType });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
