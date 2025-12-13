@@ -34,14 +34,25 @@
 						{{ summary.date_range[0] }} to {{ summary.date_range[summary.date_range.length - 1] }}
 					</span>
 				</div>
+
+				<!-- Chart visualization for improved/declined metrics -->
+				<Charts
+					v-if="chartData && chartData.labels.length > 0"
+					type="bar"
+					:data="chartData"
+					:options="chartOptions"
+					:loading="loading"
+					:error="error"
+				/>
 			</div>
 		</div>
 	</section>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { getSummary } from '../../../api/benchmarkApi';
+import Charts from './Charts.vue';
 
 const props = defineProps<{ shopId: number }>();
 
@@ -54,6 +65,35 @@ interface TrendSummary {
 const summary = ref<TrendSummary | null>(null);
 const loading = ref(false);
 const error = ref<string | null>(null);
+
+// Prepare chart data from summary
+const chartData = computed(() => {
+	if (!summary.value) return { labels: [], datasets: [] };
+	const labels = ['Improved', 'Declined'];
+	const improvedCount = summary.value.improved_metrics?.length || 0;
+	const declinedCount = summary.value.declined_metrics?.length || 0;
+	return {
+		labels,
+		datasets: [
+			{
+				label: 'Metric Count',
+				backgroundColor: ['#4caf50', '#f44336'],
+				data: [improvedCount, declinedCount]
+			}
+		]
+	};
+});
+
+const chartOptions = {
+	responsive: true,
+	plugins: {
+		legend: { display: false },
+		title: { display: true, text: 'Improved vs Declined Metrics' }
+	},
+	scales: {
+		y: { beginAtZero: true, stepSize: 1 }
+	}
+};
 
 
 function sanitizeError(err: any): string {
@@ -126,13 +166,12 @@ onMounted(fetchSummary);
 	border-radius: 4px;
 	padding: 0.25rem 0.75rem;
 	cursor: pointer;
-	font-size: 0.95em;
 }
 .retry-btn:hover {
 	background: #0056b3;
 }
 .trend-empty {
-	color: #888;
 	font-style: italic;
+	color: #666;
 }
 </style>

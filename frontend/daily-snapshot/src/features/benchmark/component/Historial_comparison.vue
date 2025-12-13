@@ -13,6 +13,21 @@
 				<em>No milestone data available.</em>
 			</div>
 			<div v-else>
+				<Charts
+				  v-if="Object.keys(milestones).length > 0"
+				  type="bar"
+				  :data="{
+					labels: Object.keys((Object.values(milestones)[0] as MilestoneMetrics) || {}),
+					datasets: Object.entries(milestones).map(([milestone, metrics], i) => ({
+					  label: String(milestone).replace('_', ' ').toUpperCase(),
+					  data: Object.values(metrics).map(v => typeof v === 'number' ? v : 0),
+					  backgroundColor: `hsl(${i * 60}, 70%, 60%)`
+					}))
+				  }"
+				  :loading="loading"
+				  :error="error"
+				  :options="{ responsive: true, plugins: { legend: { display: true } } }"
+				/>
 				<div v-for="(metrics, milestone) in milestones" :key="milestone" class="milestone-block">
 					<h4>{{ String(milestone).replace('_', ' ').toUpperCase() }}</h4>
 					<ul>
@@ -25,16 +40,16 @@
 		</div>
 	</section>
 </template>
-
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref,  computed } from 'vue';
 import { getMilestones } from '../../../api/benchmarkApi';
 
-const props = defineProps<{ shopId: number }>();
+const props = defineProps<{ shopId: string }>();
 
 interface MilestoneMetrics {
-	[key: string]: string | number | null;
+	[key: string]: number | string | null;
 }
+
 interface MilestonesData {
 	[milestone: string]: MilestoneMetrics;
 }
@@ -58,7 +73,7 @@ async function fetchMilestones() {
 	loading.value = true;
 	error.value = null;
 	try {
-		const result = await getMilestones(props.shopId);
+		const result = await getMilestones(Number(props.shopId));
 		if (result && typeof result === 'object' && !Array.isArray(result)) {
 			milestones.value = result;
 		} else {
@@ -71,76 +86,5 @@ async function fetchMilestones() {
 	} finally {
 		loading.value = false;
 	}
-}
 
-onMounted(fetchMilestones);
 </script>
-<style scoped>
-.historial-comparison {
-	background: #fff;
-	border-radius: 8px;
-	box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-	padding: 1.5rem;
-	margin: 1rem 0;
-}
-.historial-comparison h3 {
-	margin-bottom: 1rem;
-}
-.milestone-loading {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-	color: #888;
-}
-.spinner {
-	width: 1em;
-	height: 1em;
-	border: 2px solid #ccc;
-	border-top: 2px solid #007bff;
-	border-radius: 50%;
-	animation: spin 1s linear infinite;
-	display: inline-block;
-}
-@keyframes spin {
-	to { transform: rotate(360deg); }
-}
-.milestone-error {
-	color: #b00020;
-	margin-bottom: 1rem;
-}
-.retry-btn {
-	margin-left: 1rem;
-	background: #007bff;
-	color: #fff;
-	border: none;
-	border-radius: 4px;
-	padding: 0.25rem 0.75rem;
-	cursor: pointer;
-	font-size: 0.95em;
-}
-.retry-btn:hover {
-	background: #0056b3;
-}
-.milestone-empty {
-	color: #888;
-	font-style: italic;
-}
-.milestone-block {
-	margin-bottom: 1.5rem;
-	padding: 1rem;
-	border: 1px solid #eee;
-	border-radius: 6px;
-	background: #fafbfc;
-}
-.milestone-block h4 {
-	margin-bottom: 0.5rem;
-	font-size: 1.1em;
-}
-.milestone-block ul {
-	margin: 0;
-	padding-left: 1.25rem;
-}
-.milestone-block li {
-	margin-bottom: 0.4rem;
-}
-</style>

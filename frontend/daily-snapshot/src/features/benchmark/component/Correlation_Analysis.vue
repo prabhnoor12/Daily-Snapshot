@@ -11,26 +11,43 @@
 		<div v-else-if="isEmpty" class="correlation-empty" role="status">
 			No correlation data available.
 		</div>
-		<table v-else class="correlation-table">
-			<thead>
-				<tr>
-					<th>Metric Pair</th>
-					<th>Correlation</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr v-for="(value, key) in correlation" :key="key">
-					<td>{{ key }}</td>
-					<td>{{ value !== null ? value.toFixed(3) : 'N/A' }}</td>
-				</tr>
-			</tbody>
-		</table>
+		<div v-else>
+			<Charts
+				type="bar"
+				:data="{
+					labels: Object.keys(correlation),
+					datasets: [
+						{
+							label: 'Correlation',
+							data: Object.values(correlation).map(v => v ?? 0),
+							backgroundColor: '#17a2b8',
+						}
+					]
+				}"
+				:options="{ responsive: true, plugins: { legend: { display: false } }, scales: { y: { min: -1, max: 1 } } }"
+			/>
+			<table class="correlation-table">
+				<thead>
+					<tr>
+						<th>Metric Pair</th>
+						<th>Correlation</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="(value, key) in correlation" :key="key">
+						<td>{{ key }}</td>
+						<td>{{ value !== null ? value.toFixed(3) : 'N/A' }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</section>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { getCorrelation } from '../../../api/benchmarkApi';
+import Charts from './Charts.vue';
 
 const props = defineProps<{ shopId: number }>();
 
@@ -73,68 +90,5 @@ async function fetchCorrelation() {
 }
 
 onMounted(fetchCorrelation);
+
 </script>
-<style scoped>
-.correlation-analysis {
-	background: #fff;
-	border-radius: 8px;
-	box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-	padding: 1.5rem;
-	margin: 1rem 0;
-}
-.correlation-analysis h3 {
-	margin-bottom: 1rem;
-}
-.correlation-loading {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-	color: #888;
-}
-.spinner {
-	width: 1em;
-	height: 1em;
-	border: 2px solid #ccc;
-	border-top: 2px solid #007bff;
-	border-radius: 50%;
-	animation: spin 1s linear infinite;
-	display: inline-block;
-}
-@keyframes spin {
-	to { transform: rotate(360deg); }
-}
-.correlation-error {
-	color: #b00020;
-	margin-bottom: 1rem;
-}
-.retry-btn {
-	margin-left: 1rem;
-	background: #007bff;
-	color: #fff;
-	border: none;
-	border-radius: 4px;
-	padding: 0.25rem 0.75rem;
-	cursor: pointer;
-	font-size: 0.95em;
-}
-.retry-btn:hover {
-	background: #0056b3;
-}
-.correlation-empty {
-	color: #888;
-	font-style: italic;
-}
-.correlation-table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-top: 1rem;
-}
-.correlation-table th, .correlation-table td {
-	border: 1px solid #eee;
-	padding: 0.5rem 1rem;
-	text-align: left;
-}
-.correlation-table th {
-	background: #f7f7f7;
-}
-</style>

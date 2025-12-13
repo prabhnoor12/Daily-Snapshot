@@ -16,12 +16,22 @@
         <strong>{{ key }}:</strong> {{ value }}
       </li>
     </ul>
+    <!-- Chart visualization for metrics -->
+    <Charts
+      v-if="chartData && chartData.labels.length > 0"
+      type="bar"
+      :data="chartData"
+      :options="chartOptions"
+      :loading="loading"
+      :error="error"
+    />
   </section>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { getMetrics } from '../../../api/benchmarkApi';
+import Charts from './Charts.vue';
 
 const props = defineProps<{ shopId: number }>();
 
@@ -34,6 +44,38 @@ const loading = ref(false);
 const error = ref<string | null>(null);
 
 const isEmpty = computed(() => Object.keys(metrics.value).length === 0);
+
+// Prepare chart data from metrics
+const chartData = computed(() => {
+  const m = metrics.value;
+  if (!m || Object.keys(m).length === 0) return { labels: [], datasets: [] };
+  const labels = Object.keys(m);
+  const data = labels.map(key => {
+    const value = m[key];
+    return typeof value === 'number' ? value : (parseFloat(value as string) || 0);
+  });
+  return {
+    labels,
+    datasets: [
+      {
+        label: 'Value',
+        backgroundColor: '#42a5f5',
+        data
+      }
+    ]
+  };
+});
+
+const chartOptions = {
+  responsive: true,
+  plugins: {
+    legend: { display: false },
+    title: { display: true, text: 'Benchmarking Metrics' }
+  },
+  scales: {
+    y: { beginAtZero: true }
+  }
+};
 
 
 function sanitizeError(err: any): string {

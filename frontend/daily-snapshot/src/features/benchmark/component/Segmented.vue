@@ -14,6 +14,7 @@
 				<em>No segmentation data available.</em>
 			</div>
 			<div v-else>
+				<!-- Existing segment blocks -->
 				<div v-for="(segment, name) in segmentation" :key="name" class="segment-block">
 					<h4>{{ name }}</h4>
 					<ul>
@@ -22,6 +23,16 @@
 						</li>
 					</ul>
 				</div>
+
+				<!-- Chart visualization -->
+				<Charts
+					v-if="chartData && chartData.labels.length > 0"
+					type="bar"
+					:data="chartData"
+					:options="chartOptions"
+					:loading="loading"
+					:error="error"
+				/>
 			</div>
 		</div>
 	</section>
@@ -30,6 +41,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { getSegmentation } from '../../../api/benchmarkApi';
+import Charts from './Charts.vue';
 
 const props = defineProps<{ shopId: number }>();
 
@@ -46,6 +58,36 @@ const error = ref<string | null>(null);
 
 const isEmpty = computed(() => Object.keys(segmentation.value).length === 0);
 
+// Prepare chart data from segmentation
+const chartData = computed(() => {
+	const seg = segmentation.value;
+	if (!seg || Object.keys(seg).length === 0) return { labels: [], datasets: [] };
+	// Collect all unique metric keys
+	const metricKeys = Array.from(new Set(Object.values(seg).flatMap(obj => Object.keys(obj))));
+	const labels = Object.keys(seg);
+	// For each metric, create a dataset
+	const datasets = metricKeys.map((metric, idx) => ({
+		label: metric,
+		backgroundColor: `hsl(${(idx * 60) % 360}, 70%, 60%)`,
+		data: labels.map((segmentName) => {
+			const value = seg[segmentName]?.[metric];
+			return typeof value === 'number' ? value : (parseFloat(value as string) || 0);
+		})
+	}));
+	return { labels, datasets };
+});
+
+const chartOptions = {
+	responsive: true,
+	plugins: {
+		legend: { display: true },
+		title: { display: true, text: 'Segmented Benchmarking Metrics' }
+	},
+	scales: {
+		y: { beginAtZero: true }
+	}
+};
+
 
 function sanitizeError(err: any): string {
 	const msg = err?.message || err?.toString() || '';
@@ -59,89 +101,16 @@ async function fetchSegmentation() {
 	loading.value = true;
 	error.value = null;
 	try {
-		const result = await getSegmentation(props.shopId);
-		if (result && typeof result === 'object' && !Array.isArray(result)) {
-			segmentation.value = result;
-		} else {
-			error.value = 'No valid segmentation data received.';
-			segmentation.value = {};
-		}
-	} catch (e: any) {
-		error.value = sanitizeError(e);
-		segmentation.value = {};
+		const data = await getSegmentation(props.shopId);
+		segmentation.value = data;
+	} catch (err) {
+		error.value = sanitizeError(err);
 	} finally {
 		loading.value = false;
 	}
-}
-
-onMounted(fetchSegmentation);
+}	onMounted(fetchSegmentation);
 </script>
 <style scoped>
 .segmented-section {
-	background: #fff;
-	border-radius: 8px;
-	box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-	padding: 1.5rem;
-	margin: 1rem 0;
-}
-.segmented-section h3 {
-	margin-bottom: 1rem;
-}
-.segmented-loading {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-	color: #888;
-}
-.spinner {
-	width: 1em;
-	height: 1em;
-	border: 2px solid #ccc;
-	border-top: 2px solid #007bff;
-	border-radius: 50%;
-	animation: spin 1s linear infinite;
-	display: inline-block;
-}
-@keyframes spin {
-	to { transform: rotate(360deg); }
-}
-.segmented-error {
-	color: #b00020;
-	margin-bottom: 1rem;
-}
-.retry-btn {
-	margin-left: 1rem;
-	background: #007bff;
-	color: #fff;
-	border: none;
-	border-radius: 4px;
-	padding: 0.25rem 0.75rem;
-	cursor: pointer;
-	font-size: 0.95em;
-}
-.retry-btn:hover {
-	background: #0056b3;
-}
-.segmented-empty {
-	color: #888;
-	font-style: italic;
-}
-.segment-block {
-	margin-bottom: 1.5rem;
-	padding: 1rem;
-	border: 1px solid #eee;
-	border-radius: 6px;
-	background: #fafbfc;
-}
-.segment-block h4 {
-	margin-bottom: 0.5rem;
-	font-size: 1.1em;
-}
-.segment-block ul {
-	margin: 0;
-	padding-left: 1.25rem;
-}
-.segment-block li {
-	margin-bottom: 0.4rem;
-}
-</style>
+  margin-bottom: 2rem;
+}	</style>
