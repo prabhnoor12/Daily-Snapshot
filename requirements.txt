@@ -11,7 +11,7 @@ gunicorn
 # Security and Auth
 passlib
 jwt
-
+flask-cors
 # Data validation
 pydantic
 

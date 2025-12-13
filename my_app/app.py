@@ -1,4 +1,6 @@
+
 from flask import Flask, jsonify
+from my_app.config.cors import configure_cors
 
 # Blueprints
 from my_app.api.analyticsApi import analytics_bp
@@ -12,7 +14,9 @@ from my_app.api.userApi import user_bp
 from my_app.middleware.logger import log_request, log_response, log_error
 from my_app.utils.error_handling import register_error_handlers
 
+
 app = Flask(__name__)
+configure_cors(app)
 
 # Register blueprints
 app.register_blueprint(analytics_bp, url_prefix='/api')
