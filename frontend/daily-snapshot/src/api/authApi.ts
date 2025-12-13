@@ -3,8 +3,8 @@ import axios from 'axios';
 
 
 
-// Use VITE_API_BASE from .env for backend address
-const API_BASE = (import.meta.env.VITE_API_BASE ? `${import.meta.env.VITE_API_BASE}/api/auth` : '/api/auth');
+// Hardcoded backend address
+const API_BASE = 'https://daily-snapshot-1.onrender.com/api/auth';
 
 export async function initiateShopifyOAuth(shopDomain: string): Promise<string> {
   const response = await axios.get(`${API_BASE}/shopify/initiate`, {
