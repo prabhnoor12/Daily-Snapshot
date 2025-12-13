@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = '/forecasting';
+const API_BASE = 'https://daily-snapshot-1.onrender.com/forecasting';
 
 // --- Sales Forecast Endpoints ---
 export async function getSalesForecast(shopId: number, segment?: string) {

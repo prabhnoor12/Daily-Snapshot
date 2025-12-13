@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 
-const API_BASE = '/api/subscription';
+const API_BASE = 'https://daily-snapshot-1.onrender.com/api/subscription';
 
 // Types
 export interface Subscription {

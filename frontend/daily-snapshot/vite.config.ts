@@ -9,9 +9,9 @@ export default defineConfig({
     host: '127.0.0.1',
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:5000',
+        target: 'https://daily-snapshot-1.onrender.com',
         changeOrigin: true,
-        secure: false,
+        secure: true,
         ws: true
       }
     }

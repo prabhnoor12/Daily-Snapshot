@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 // All backend auth endpoints are prefixed with /api/auth via Vite proxy
-const API_BASE = '/api/auth';
+const API_BASE = 'https://daily-snapshot-1.onrender.com/api/auth';
 
 export async function initiateShopifyOAuth(shopDomain: string): Promise<string> {
   const response = await axios.get(`${API_BASE}/shopify/initiate`, {

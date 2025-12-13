@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = '/benchmarking';
+const API_BASE = 'https://daily-snapshot-1.onrender.com/benchmarking';
 
 export async function getMetrics(shopId: number) {
 	const url = `${API_BASE}/${shopId}/metrics`;

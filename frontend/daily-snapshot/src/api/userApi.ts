@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = '/api/user';
+const API_BASE = 'https://daily-snapshot-1.onrender.com/api/user';
 
 // Set user status
 export function setUserStatus(userId: number, status: string) {

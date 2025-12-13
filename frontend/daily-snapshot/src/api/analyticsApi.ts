@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = '/analytics';
+const API_BASE = 'https://daily-snapshot-1.onrender.com/analytics';
 
 export async function getDayOverDayPerformance(shopId: number) {
   const res = await axios.get(`${API_BASE}/day-over-day/${shopId}`);

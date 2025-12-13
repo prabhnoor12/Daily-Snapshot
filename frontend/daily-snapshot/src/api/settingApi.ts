@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = '/api/settings';
+const API_BASE = 'https://daily-snapshot-1.onrender.com/api/settings';
 
 // Get all settings for a user
 export function getSettings(userId: number) {
