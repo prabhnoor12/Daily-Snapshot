@@ -76,11 +76,21 @@ def register_error_handlers(app):
 
     @app.errorhandler(404)
     def not_found(e):
+        from flask import request
         ctx = get_request_context()
         logger.warning(f"404 Not Found: {e} | Context: {ctx}")
         response = {
             'error': 'Not Found',
-            'message': 'The requested resource was not found.'
+            'message': 'The requested resource was not found.',
+            'details': {
+                'method': request.method,
+                'path': request.path,
+                'args': request.args.to_dict(),
+                'headers': dict(request.headers),
+                'endpoint': request.endpoint,
+                'url': request.url
+            },
+            'context': ctx
         }
         return jsonify(response), 404
 
