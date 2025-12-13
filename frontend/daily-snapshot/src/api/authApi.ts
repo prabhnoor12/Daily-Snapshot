@@ -2,8 +2,9 @@
 import axios from 'axios';
 
 
-// Use Vite proxy for local dev, fallback to production for build
-const API_BASE = import.meta.env.VITE_API_AUTH_BASE || '/api/auth';
+
+// Use VITE_API_BASE from .env for backend address
+const API_BASE = (import.meta.env.VITE_API_BASE ? `${import.meta.env.VITE_API_BASE}/api/auth` : '/api/auth');
 
 export async function initiateShopifyOAuth(shopDomain: string): Promise<string> {
   const response = await axios.get(`${API_BASE}/shopify/initiate`, {
