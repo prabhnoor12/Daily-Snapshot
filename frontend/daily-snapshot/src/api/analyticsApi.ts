@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_BASE = 'https://daily-snapshot-1.onrender.com/analytics';
+
+// Use Vite proxy for local dev, fallback to production for build
+const API_BASE = import.meta.env.VITE_API_ANALYTICS_BASE || '/analytics';
 
 export async function getDayOverDayPerformance(shopId: number) {
   const res = await axios.get(`${API_BASE}/day-over-day/${shopId}`);

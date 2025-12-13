@@ -107,10 +107,13 @@ def validate_hmac(params, shopify_secret):
 	return hmac.compare_digest(hmac_received, hmac_calculated)
 
 def initiate_shopify_oauth(shop_domain, session):
-	state = generate_state()
-	session['shopify_oauth_state'] = state
-	oauth_url = build_shopify_oauth_url(shop_domain, state)
-	return redirect(oauth_url)
+		if not shop_domain or not shop_domain.endswith('.myshopify.com'):
+			from flask import jsonify
+			return jsonify({'error': 'Invalid or missing shop_domain'}), 400
+		state = generate_state()
+		session['shopify_oauth_state'] = state
+		oauth_url = build_shopify_oauth_url(shop_domain, state)
+		return redirect(oauth_url)
 
 def handle_shopify_callback(request_args, session):
 	shop = request_args.get('shop')

@@ -15,7 +15,10 @@ from my_app.middleware.logger import log_request, log_response, log_error
 from my_app.utils.error_handling import register_error_handlers
 
 
+
 app = Flask(__name__)
+# Set a strong secret key for session management
+app.secret_key = 'replace-this-with-a-strong-random-secret-key'
 configure_cors(app)
 
 # Register blueprints
