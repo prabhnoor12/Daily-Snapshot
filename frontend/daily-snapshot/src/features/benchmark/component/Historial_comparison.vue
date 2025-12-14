@@ -70,21 +70,22 @@ function sanitizeError(err: any): string {
 }
 
 async function fetchMilestones() {
-	loading.value = true;
-	error.value = null;
-	try {
-		const result = await getMilestones(Number(props.shopId));
-		if (result && typeof result === 'object' && !Array.isArray(result)) {
-			milestones.value = result;
-		} else {
-			error.value = 'No valid milestone data received.';
-			milestones.value = {};
-		}
-	} catch (e: any) {
-		error.value = sanitizeError(e);
-		milestones.value = {};
-	} finally {
-		loading.value = false;
-	}
+       loading.value = true;
+       error.value = null;
+       try {
+	       const result = await getMilestones(Number(props.shopId));
+	       if (result && typeof result === 'object' && !Array.isArray(result)) {
+		       milestones.value = result;
+	       } else {
+		       error.value = 'No valid milestone data received.';
+		       milestones.value = {};
+	       }
+       } catch (e: any) {
+	       error.value = sanitizeError(e);
+	       milestones.value = {};
+       } finally {
+	       loading.value = false;
+       }
+}
 
 </script>

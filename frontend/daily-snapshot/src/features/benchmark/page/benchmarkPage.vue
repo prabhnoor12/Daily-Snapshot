@@ -18,16 +18,16 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import Dashboard from '../component/Dashboard.vue';
-import Metrics from '../component/Metrics.vue';
-import Trend_Detection from '../component/Trend_Detection.vue';
-import Correlation_Analysis from '../component/Correlation_Analysis.vue';
-import Historial_comparison from '../component/Historial_comparison.vue';
-import Milestone_comparison from '../component/Milestone_comparison.vue';
-import Segmented from '../component/Segmented.vue';
-import Auto_Recommendations from '../component/Auto_Recommendations.vue';
-import Warnings from '../component/Warnings.vue';
-import ExportButton from '../component/ExportButton.vue';
+import * as Dashboard from '../component/Dashboard.vue';
+import * as Metrics from '../component/Metrics.vue';
+import * as Trend_Detection from '../component/Trend_Detection.vue';
+import * as Correlation_Analysis from '../component/Correlation_Analysis.vue';
+import * as Historial_comparison from '../component/Historial_comparison.vue';
+import * as Milestone_comparison from '../component/Milestone_comparison.vue';
+import * as Segmented from '../component/Segmented.vue';
+import * as Auto_Recommendations from '../component/Auto_Recommendations.vue';
+import * as Warnings from '../component/Warnings.vue';
+import * as ExportButton from '../component/ExportButton.vue';
 import './benchmarkPage.css';
 // Example: shopId could come from route, store, or props
 const shopId = ref(1);
