@@ -1,10 +1,12 @@
 from flask import Blueprint, request, send_file, jsonify
+from my_app.middleware.shopify_session import verify_shopify_session_token
 from ..services.product_comparison_service import compare_products, compare_categories
 import io
 
 product_comparison_bp = Blueprint('product_comparison', __name__)
 
 @product_comparison_bp.route('/compare/products', methods=['POST'])
+@verify_shopify_session_token
 def api_compare_products():
     data = request.get_json() or {}
     response = compare_products(data)
@@ -22,6 +24,7 @@ def api_compare_products():
     return jsonify(response)
 
 @product_comparison_bp.route('/compare/categories', methods=['POST'])
+@verify_shopify_session_token
 def api_compare_categories():
     data = request.get_json() or {}
     response = compare_categories(data)

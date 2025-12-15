@@ -1,6 +1,7 @@
-import jwt
+
 import datetime
 from typing import Any, Dict, Optional
+import jwt  # Ensure you have installed 'PyJWT' via pip: pip install PyJWT
 
 SECRET_KEY = "your-secret-key"  # Replace with your actual secret key
 ALGORITHM = "HS256"

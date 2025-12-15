@@ -1,4 +1,5 @@
 from flask import Blueprint, request, send_file, jsonify
+from my_app.middleware.shopify_session import verify_shopify_session_token
 from ..services.forecasting_service import get_sales_forecast, get_orders_forecast
 import io, json
 
@@ -16,16 +17,19 @@ def _get_orders(shop_id):
 
 # Individual endpoints for sales forecast features
 @forecasting_bp.route('/forecasting/sales/<int:shop_id>/forecast', methods=['GET'])
+@verify_shopify_session_token
 def api_sales_forecast(shop_id):
     data = _get_sales(shop_id)
     return jsonify(data['data']['next_week_sales_forecast'])
 
 @forecasting_bp.route('/forecasting/sales/<int:shop_id>/exp_smoothing', methods=['GET'])
+@verify_shopify_session_token
 def api_sales_exp_smoothing(shop_id):
     data = _get_sales(shop_id)
     return jsonify(data['data']['exp_smoothing_forecast'])
 
 @forecasting_bp.route('/forecasting/sales/<int:shop_id>/arima', methods=['GET'])
+@verify_shopify_session_token
 def api_sales_arima(shop_id):
     data = _get_sales(shop_id)
     return jsonify({
@@ -34,31 +38,37 @@ def api_sales_arima(shop_id):
     })
 
 @forecasting_bp.route('/forecasting/sales/<int:shop_id>/trend', methods=['GET'])
+@verify_shopify_session_token
 def api_sales_trend(shop_id):
     data = _get_sales(shop_id)
     return jsonify(data['data']['trend'])
 
 @forecasting_bp.route('/forecasting/sales/<int:shop_id>/chart', methods=['GET'])
+@verify_shopify_session_token
 def api_sales_chart(shop_id):
     data = _get_sales(shop_id)
     return jsonify(data['data']['chart_data'])
 
 @forecasting_bp.route('/forecasting/sales/<int:shop_id>/warnings', methods=['GET'])
+@verify_shopify_session_token
 def api_sales_warnings(shop_id):
     data = _get_sales(shop_id)
     return jsonify(data['data']['warnings'])
 
 @forecasting_bp.route('/forecasting/sales/<int:shop_id>/summary', methods=['GET'])
+@verify_shopify_session_token
 def api_sales_summary(shop_id):
     data = _get_sales(shop_id)
     return jsonify(data['data']['summary'])
 
 @forecasting_bp.route('/forecasting/sales/<int:shop_id>/recommendation', methods=['GET'])
+@verify_shopify_session_token
 def api_sales_recommendation(shop_id):
     data = _get_sales(shop_id)
     return jsonify(data['data']['recommendation'])
 
 @forecasting_bp.route('/forecasting/sales/<int:shop_id>/export', methods=['GET'])
+@verify_shopify_session_token
 def api_sales_export(shop_id):
     export_format = request.args.get('format', 'pdf')
     data = _get_sales(shop_id)
@@ -76,16 +86,19 @@ def api_sales_export(shop_id):
 
 # Individual endpoints for orders forecast features
 @forecasting_bp.route('/forecasting/orders/<int:shop_id>/forecast', methods=['GET'])
+@verify_shopify_session_token
 def api_orders_forecast(shop_id):
     data = _get_orders(shop_id)
     return jsonify(data['data']['next_week_orders_forecast'])
 
 @forecasting_bp.route('/forecasting/orders/<int:shop_id>/exp_smoothing', methods=['GET'])
+@verify_shopify_session_token
 def api_orders_exp_smoothing(shop_id):
     data = _get_orders(shop_id)
     return jsonify(data['data']['exp_smoothing_forecast'])
 
 @forecasting_bp.route('/forecasting/orders/<int:shop_id>/arima', methods=['GET'])
+@verify_shopify_session_token
 def api_orders_arima(shop_id):
     data = _get_orders(shop_id)
     return jsonify({
@@ -94,31 +107,37 @@ def api_orders_arima(shop_id):
     })
 
 @forecasting_bp.route('/forecasting/orders/<int:shop_id>/trend', methods=['GET'])
+@verify_shopify_session_token
 def api_orders_trend(shop_id):
     data = _get_orders(shop_id)
     return jsonify(data['data']['trend'])
 
 @forecasting_bp.route('/forecasting/orders/<int:shop_id>/chart', methods=['GET'])
+@verify_shopify_session_token
 def api_orders_chart(shop_id):
     data = _get_orders(shop_id)
     return jsonify(data['data']['chart_data'])
 
 @forecasting_bp.route('/forecasting/orders/<int:shop_id>/warnings', methods=['GET'])
+@verify_shopify_session_token
 def api_orders_warnings(shop_id):
     data = _get_orders(shop_id)
     return jsonify(data['data']['warnings'])
 
 @forecasting_bp.route('/forecasting/orders/<int:shop_id>/summary', methods=['GET'])
+@verify_shopify_session_token
 def api_orders_summary(shop_id):
     data = _get_orders(shop_id)
     return jsonify(data['data']['summary'])
 
 @forecasting_bp.route('/forecasting/orders/<int:shop_id>/recommendation', methods=['GET'])
+@verify_shopify_session_token
 def api_orders_recommendation(shop_id):
     data = _get_orders(shop_id)
     return jsonify(data['data']['recommendation'])
 
 @forecasting_bp.route('/forecasting/orders/<int:shop_id>/export', methods=['GET'])
+@verify_shopify_session_token
 def api_orders_export(shop_id):
     export_format = request.args.get('format', 'pdf')
     data = _get_orders(shop_id)
