@@ -1,7 +1,8 @@
 
 import datetime
 from typing import Any, Dict, Optional
-import jwt  # Ensure you have installed 'PyJWT' via pip: pip install PyJWT
+# Uses PyJWT: https://pyjwt.readthedocs.io/en/stable/
+import jwt  # PyJWT must be installed: pip install PyJWT
 
 SECRET_KEY = "your-secret-key"  # Replace with your actual secret key
 ALGORITHM = "HS256"
@@ -32,8 +33,10 @@ def decode_jwt(token: str) -> Optional[Dict[str, Any]]:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
     except jwt.ExpiredSignatureError:
+        # Token has expired
         return None
     except jwt.InvalidTokenError:
+        # Token is invalid (bad signature, malformed, etc.)
         return None
 
 def verify_jwt(token: str) -> bool:
