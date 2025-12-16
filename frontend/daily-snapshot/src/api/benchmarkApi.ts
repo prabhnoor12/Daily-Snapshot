@@ -1,66 +1,45 @@
-import axios from 'axios';
+
+import { shopifyFetch, shopifyFetchJson } from './shopifyFetch';
 
 const API_BASE = 'https://daily-snapshot-1.onrender.com/benchmarking';
 
-export async function getMetrics(shopId: number) {
-	const url = `${API_BASE}/${shopId}/metrics`;
-	const response = await axios.get(url);
-	return response.data;
+  const url = `${API_BASE}/${shopId}/metrics`;
+  return shopifyFetchJson(url);
 }
 
-export async function getTrends(shopId: number) {
-	const url = `${API_BASE}/${shopId}/trends`;
-	const response = await axios.get(url);
-	return response.data;
+  const url = `${API_BASE}/${shopId}/trends`;
+  return shopifyFetchJson(url);
 }
 
-export async function getCorrelation(shopId: number) {
-	const url = `${API_BASE}/${shopId}/correlation`;
-	const response = await axios.get(url);
-	return response.data;
+  const url = `${API_BASE}/${shopId}/correlation`;
+  return shopifyFetchJson(url);
 }
 
-export async function getSegmentation(shopId: number) {
-	const url = `${API_BASE}/${shopId}/segmentation`;
-	const response = await axios.get(url);
-	return response.data;
+  const url = `${API_BASE}/${shopId}/segmentation`;
+  return shopifyFetchJson(url);
 }
 
-export async function getWarnings(shopId: number) {
-	const url = `${API_BASE}/${shopId}/warnings`;
-	const response = await axios.get(url);
-	return response.data;
+  const url = `${API_BASE}/${shopId}/warnings`;
+  return shopifyFetchJson(url);
 }
 
-export async function getMilestones(shopId: number) {
-	const url = `${API_BASE}/${shopId}/milestones`;
-	const response = await axios.get(url);
-	return response.data;
+  const url = `${API_BASE}/${shopId}/milestones`;
+  return shopifyFetchJson(url);
 }
 
-export async function getRecommendations(shopId: number) {
-	const url = `${API_BASE}/${shopId}/recommendations`;
-	const response = await axios.get(url);
-	return response.data;
+  const url = `${API_BASE}/${shopId}/recommendations`;
+  return shopifyFetchJson(url);
 }
 
-export async function getDashboard(shopId: number) {
-	const url = `${API_BASE}/${shopId}/dashboard`;
-	const response = await axios.get(url);
-	return response.data;
+  const url = `${API_BASE}/${shopId}/dashboard`;
+  return shopifyFetchJson(url);
 }
 
-export async function getSummary(shopId: number) {
-	const url = `${API_BASE}/${shopId}/summary`;
-	const response = await axios.get(url);
-	return response.data;
+  const url = `${API_BASE}/${shopId}/summary`;
+  return shopifyFetchJson(url);
 }
 
-export async function exportBenchmarking(shopId: number, format: 'pdf' | 'excel' = 'pdf') {
-	const url = `${API_BASE}/${shopId}/export`;
-	const response = await axios.get(url, {
-		params: { format },
-		responseType: 'blob',
-	});
-	return response;
+  const url = new URL(`${API_BASE}/${shopId}/export`);
+  url.searchParams.set('format', format);
+  return shopifyFetch(url.toString(), { method: 'GET' });
 }

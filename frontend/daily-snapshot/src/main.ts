@@ -1,8 +1,9 @@
 
 
+
 import { createApp } from 'vue';
 import App from './App.vue';
-// Removed Shopify App Bridge setup
+import { ShopifyAppBridgePlugin } from './shopifyAppBridge';
 import { createRouter, createWebHistory } from 'vue-router';
 
 import AuthPage from './features/auth/authPage.vue';
@@ -32,10 +33,9 @@ const router = createRouter({
 
 // Removed unused getQueryParam helper
 
-// Create Vue app first so we can mount even if App Bridge fails
+// Initialize Shopify App Bridge and provide it globally
 const app = createApp(App);
 app.use(router);
-
-// App Bridge setup removed
+app.use(ShopifyAppBridgePlugin);
 app.mount('#app');
-console.log('[Vue] App mounted.');
+console.log('[Vue] App mounted with Shopify App Bridge.');
