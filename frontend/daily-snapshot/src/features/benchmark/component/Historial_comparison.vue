@@ -73,7 +73,7 @@ async function fetchMilestones() {
        loading.value = true;
        error.value = null;
        try {
-	       const result = await getMilestones(Number(props.shopId));
+	       const result = await getMilestones(props.shopId);
 	       if (result && typeof result === 'object' && !Array.isArray(result)) {
 		       milestones.value = result;
 	       } else {

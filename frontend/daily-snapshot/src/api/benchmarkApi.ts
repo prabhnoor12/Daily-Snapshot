@@ -11,8 +11,6 @@ export {
   getBenchmarkSummary as getSummary,
   getBenchmarkWarnings as getWarnings
 };
-// Export exportBenchmark after its definition to avoid redeclaration
-export { exportBenchmark };
 
 import { shopifyFetch, shopifyFetchJson } from './shopifyFetch';
 
