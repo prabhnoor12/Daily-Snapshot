@@ -8,8 +8,17 @@ function getQueryParam(name: string): string | null {
 
 
 // Get API key from environment and host from Shopify's query param
-const apiKey = import.meta.env.VITE_SHOPIFY_API_KEY || getQueryParam('apiKey');
-const host = getQueryParam('host');
+const apiKey = import.meta.env.VITE_SHOPIFY_API_KEY;
+let host = getQueryParam('host');
+// Fallback for local development if host is not in URL
+if (!host) {
+  host = 'sanacut.myshopify.com';
+}
+
+if (!apiKey) {
+  // eslint-disable-next-line no-console
+  console.error('VITE_SHOPIFY_API_KEY is not set. Please add it to your .env file.');
+}
 
 
 let appBridgeInstance: ReturnType<typeof createAppBridge> | null = null;
