@@ -6,25 +6,29 @@ function getQueryParam(name: string): string | null {
   return params.get(name);
 }
 
-// Get API key and shop origin from environment or URL
+
+// Get API key from environment and host from Shopify's query param
 const apiKey = import.meta.env.VITE_SHOPIFY_API_KEY || getQueryParam('apiKey');
-const shopOrigin = getQueryParam('shop') || getQueryParam('shopOrigin');
+const host = getQueryParam('host');
+
 
 let appBridgeInstance: ReturnType<typeof createAppBridge> | null = null;
 
+// Factory function to get or create the App Bridge instance
 export function getAppBridge() {
   if (!appBridgeInstance) {
-    if (!apiKey || !shopOrigin) {
-      throw new Error('Shopify App Bridge requires apiKey and shopOrigin');
+    if (!apiKey || !host) {
+      throw new Error('Shopify App Bridge requires apiKey and host');
     }
     appBridgeInstance = createAppBridge({
       apiKey,
-      host: btoa(shopOrigin), // Shopify expects base64-encoded host
+      host, // already base64 encoded by Shopify
       forceRedirect: true,
     });
   }
   return appBridgeInstance;
 }
+
 
 // Optionally, export a Vue plugin for provide/inject usage
 import type { App } from 'vue';

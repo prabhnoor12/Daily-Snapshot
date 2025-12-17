@@ -39,7 +39,7 @@ async function fetchRecommendations() {
 	loading.value = true;
 	error.value = null;
 	try {
-		const result = await getRecommendations(props.shopId);
+		const result = await getRecommendations(String(props.shopId));
 		if (Array.isArray(result)) {
 			recommendations.value = result;
 		} else {

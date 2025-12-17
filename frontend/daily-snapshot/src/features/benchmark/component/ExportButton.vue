@@ -20,13 +20,13 @@ async function download(format: 'pdf' | 'excel') {
   loading.value = true;
   error.value = null;
   try {
-    const response = await exportBenchmark(props.shopId, format);
-    const contentType = response.headers['content-type'];
+    const response = await exportBenchmark(String(props.shopId), format);
+    const contentType = response.headers.get('content-type');
     if (!contentType || !(contentType.includes('pdf') || contentType.includes('excel') || contentType.includes('sheet'))) {
       error.value = 'No valid export data received.';
       return;
     }
-    const blob = new Blob([response.data], { type: contentType });
+    const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;

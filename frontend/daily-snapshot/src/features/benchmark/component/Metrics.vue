@@ -90,7 +90,7 @@ async function fetchMetrics() {
   loading.value = true;
   error.value = null;
   try {
-    const result = await getMetrics(props.shopId);
+    const result = await getMetrics(String(props.shopId));
     if (result && typeof result === 'object' && !Array.isArray(result)) {
       metrics.value = result;
     } else {

@@ -42,7 +42,7 @@ async function fetchWarnings() {
   loading.value = true;
   error.value = null;
   try {
-    const result = await getWarnings(props.shopId);
+    const result = await getWarnings(String(props.shopId));
     if (Array.isArray(result)) {
       warnings.value = result;
     } else {

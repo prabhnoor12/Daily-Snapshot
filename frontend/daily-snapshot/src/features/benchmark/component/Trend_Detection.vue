@@ -108,7 +108,7 @@ async function fetchSummary() {
 	loading.value = true;
 	error.value = null;
 	try {
-		const result = await getSummary(props.shopId);
+		const result = await getSummary(String(props.shopId));
 		if (result && typeof result === 'object' && !Array.isArray(result)) {
 			summary.value = result;
 		} else {

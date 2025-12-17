@@ -9,9 +9,10 @@ export {
   getBenchmarkMetrics as getMetrics,
   getBenchmarkSegmentation as getSegmentation,
   getBenchmarkSummary as getSummary,
-  getBenchmarkWarnings as getWarnings,
-  exportBenchmark,
+  getBenchmarkWarnings as getWarnings
 };
+// Export exportBenchmark after its definition to avoid redeclaration
+export { exportBenchmark };
 
 import { shopifyFetch, shopifyFetchJson } from './shopifyFetch';
 

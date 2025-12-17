@@ -101,7 +101,7 @@ async function fetchSegmentation() {
 	loading.value = true;
 	error.value = null;
 	try {
-		const data = await getSegmentation(props.shopId);
+		const data = await getSegmentation(String(props.shopId));
 		segmentation.value = data;
 	} catch (err) {
 		error.value = sanitizeError(err);

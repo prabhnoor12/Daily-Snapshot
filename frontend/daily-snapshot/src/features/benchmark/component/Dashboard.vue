@@ -91,7 +91,7 @@ async function fetchDashboard() {
 	   loading.value = true;
 	   error.value = null;
 	   try {
-		   const result = await getDashboard(props.shopId);
+		   const result = await getDashboard(String(props.shopId));
 		   // Only accept plain objects (not arrays, not strings)
 		   if (result && typeof result === 'object' && !Array.isArray(result)) {
 			   dashboard.value = result;

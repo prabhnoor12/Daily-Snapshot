@@ -74,7 +74,7 @@ async function fetchCorrelation() {
 	loading.value = true;
 	error.value = null;
 	try {
-		const result = await getCorrelation(props.shopId);
+		const result = await getCorrelation(String(props.shopId));
 		if (result && typeof result === 'object' && !Array.isArray(result)) {
 			correlation.value = result;
 		} else {

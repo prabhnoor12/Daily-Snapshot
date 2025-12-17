@@ -105,7 +105,7 @@ async function fetchMilestones() {
 	loading.value = true;
 	error.value = null;
 	try {
-		const data = await getMilestones(props.shopId);
+		const data = await getMilestones(String(props.shopId));
 		milestones.value = data;
 	} catch (err) {
 		error.value = sanitizeError(err);
