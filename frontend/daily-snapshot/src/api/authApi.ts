@@ -1,5 +1,5 @@
 
-import { shopifyFetch, shopifyFetchJson } from './shopifyFetch';
+import { shopifyFetch } from './shopifyFetch';
 
 const API_BASE = 'https://daily-snapshot-1.onrender.com/api/auth';
 

@@ -1,6 +1,18 @@
 // Alias for compatibility with Dashboard.vue
 export const getDashboard = getBenchmarkDashboard;
 
+// Export aliases for compatibility with components
+export {
+  getBenchmarkRecommendations as getRecommendations,
+  getBenchmarkCorrelation as getCorrelation,
+  getBenchmarkMilestones as getMilestones,
+  getBenchmarkMetrics as getMetrics,
+  getBenchmarkSegmentation as getSegmentation,
+  getBenchmarkSummary as getSummary,
+  getBenchmarkWarnings as getWarnings,
+  exportBenchmark,
+};
+
 import { shopifyFetch, shopifyFetchJson } from './shopifyFetch';
 
 const API_BASE = 'https://daily-snapshot-1.onrender.com/benchmarking';

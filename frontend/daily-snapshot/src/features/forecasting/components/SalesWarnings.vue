@@ -50,7 +50,7 @@ async function fetchWarnings() {
   loading.value = true;
   error.value = null;
   try {
-    const result = await getSalesWarnings(props.shopId, props.segment);
+    const result = await getSalesWarnings(props.shopId.toString(), props.segment);
     if (!result || !Array.isArray(result)) {
       throw new Error('Invalid sales warnings data received.');
     }

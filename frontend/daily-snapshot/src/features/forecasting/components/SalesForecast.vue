@@ -82,7 +82,7 @@ async function fetchForecast() {
   loading.value = true;
   error.value = null;
   try {
-    const result = await getSalesForecast(props.shopId, props.segment);
+    const result = await getSalesForecast(props.shopId.toString(), props.segment);
     if (typeof result !== 'number') {
       throw new Error('Invalid sales forecast data received.');
     }

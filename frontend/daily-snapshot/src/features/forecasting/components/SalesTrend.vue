@@ -85,7 +85,7 @@ async function fetchTrend() {
   loading.value = true;
   error.value = null;
   try {
-    const result = await getSalesTrend(props.shopId, props.segment);
+    const result = await getSalesTrend(props.shopId.toString(), props.segment);
     if (typeof result !== 'number') {
       throw new Error('Invalid sales trend data received.');
     }

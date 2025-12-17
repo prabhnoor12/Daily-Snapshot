@@ -103,7 +103,7 @@ async function fetchForecast() {
   loading.value = true;
   error.value = null;
   try {
-    const result = await getSalesArima(props.shopId, props.segment);
+    const result = await getSalesArima(props.shopId.toString(), props.segment);
     if (!result || !Array.isArray(result.forecast)) {
       throw new Error('Invalid ARIMA forecast data received.');
     }

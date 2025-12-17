@@ -82,7 +82,7 @@ async function fetchForecast() {
   loading.value = true;
   error.value = null;
   try {
-    const result = await getSalesExpSmoothing(props.shopId, props.segment);
+    const result = await getSalesExpSmoothing(props.shopId.toString(), props.segment);
     if (!result || !Array.isArray(result)) {
       throw new Error('Invalid exponential smoothing forecast data received.');
     }

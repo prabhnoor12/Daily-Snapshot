@@ -39,7 +39,8 @@ async function exportSnapshot() {
   success.value = false;
   try {
     const res = await exportDailySnapshot(props.shopId, 'csv');
-    const blob = new Blob([res], { type: 'text/csv' });
+    const data = await res.blob();
+    const blob = new Blob([data], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;

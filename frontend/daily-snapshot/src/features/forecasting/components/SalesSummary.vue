@@ -21,7 +21,7 @@ const error = ref<string | null>(null);
 onMounted(async () => {
   loading.value = true;
   try {
-    summary.value = await getSalesSummary(props.shopId, props.segment);
+    summary.value = await getSalesSummary(props.shopId.toString(), props.segment);
   } catch (e: any) {
     error.value = e?.message || 'Failed to load summary.';
   } finally {

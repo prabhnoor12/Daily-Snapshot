@@ -74,7 +74,7 @@ onMounted(async () => {
   loading.value = true;
   error.value = null;
   try {
-    const result = await getSalesChart(props.shopId, props.segment);
+    const result = await getSalesChart(props.shopId.toString(), props.segment);
     if (!result) throw new Error('No chart data received.');
     chart.value = result;
   } catch (e: any) {

@@ -21,7 +21,7 @@ const error = ref<string | null>(null);
 onMounted(async () => {
   loading.value = true;
   try {
-    recommendation.value = await getSalesRecommendation(props.shopId, props.segment);
+    recommendation.value = await getSalesRecommendation(props.shopId.toString(), props.segment);
   } catch (e: any) {
     error.value = e?.message || 'Failed to load recommendation.';
   } finally {
