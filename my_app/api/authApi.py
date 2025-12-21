@@ -41,5 +41,12 @@ def api_shopify_oauth_initiate():
 # Shopify OAuth callback
 @auth_bp.route('/auth/shopify/callback', methods=['GET'])
 def api_shopify_oauth_callback():
-		# Pass the 'redirect' parameter if present for frontend redirect security
-		return auth_service.handle_shopify_callback(request.args, session)
+	# Handle Shopify OAuth and redirect to fixed frontend with shop param if successful
+	result = auth_service.handle_shopify_callback(request.args, session)
+	if isinstance(result, tuple) and isinstance(result[0], dict) and result[1] == 200:
+		shop = request.args.get('shop')
+		frontend_url = "https://daily-snapshot.onrender.com"
+		from flask import redirect
+		redirect_url = f"{frontend_url}?shop={shop}" if shop else frontend_url
+		return redirect(redirect_url)
+	return result
