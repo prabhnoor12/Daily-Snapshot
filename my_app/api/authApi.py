@@ -1,5 +1,5 @@
 
-from flask import Blueprint, request, jsonify, session
+from flask import Blueprint, request, session
 from ..services import auth_service
 
 auth_bp = Blueprint('auth', __name__)
@@ -41,4 +41,5 @@ def api_shopify_oauth_initiate():
 # Shopify OAuth callback
 @auth_bp.route('/auth/shopify/callback', methods=['GET'])
 def api_shopify_oauth_callback():
-	return jsonify(*auth_service.handle_shopify_callback(request.args, session))
+		# Pass the 'redirect' parameter if present for frontend redirect security
+		return auth_service.handle_shopify_callback(request.args, session)

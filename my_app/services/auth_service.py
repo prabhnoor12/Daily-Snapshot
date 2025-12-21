@@ -1,4 +1,4 @@
-import os
+
 import hashlib
 import hmac
 import secrets
@@ -7,8 +7,8 @@ import datetime
 from urllib.parse import urlencode
 from flask import redirect
 from passlib.context import CryptContext
-from my_app.crud.user_crud import get_user_by_email, get_password_hash, create_user, update_user
-from my_app.utils.jwt_utils import encode_jwt, decode_jwt, verify_jwt, refresh_jwt_token
+from my_app.crud.user_crud import get_user_by_email, update_user
+from my_app.utils.jwt_utils import encode_jwt, decode_jwt, refresh_jwt_token
 from my_app.utils.error_handling import AuthError
 from my_app.utils.apiResponse import success_response
 from my_app.middleware.logger import logger
@@ -60,7 +60,6 @@ def reset_password(email: str, new_password: str) -> dict:
 		if not user:
 			logger.warning(f"Password reset failed: User not found {email}")
 			raise AuthError("User not found.")
-		hashed = get_password_hash(new_password)
 		update_user(db, user.id, {"password": new_password})
 		logger.info(f"Password reset for user: {email}")
 		return success_response(message="Password reset successful.")
@@ -162,7 +161,7 @@ def handle_shopify_callback(request_args, session):
 		db.close()
 
 	# Create a user for the shop owner if not already present
-	from ..crud.user_crud import get_user_by_email, create_user
+	# Only import create_user if needed, avoid redefinition
 	from ..schemas.user_schema import UserCreate
 	user_email = shop_data.get('email')
 	user_name = shop_data.get('shop_owner') or shop_data.get('name') or 'Shopify User'
@@ -170,15 +169,13 @@ def handle_shopify_callback(request_args, session):
 	try:
 		existing_user = get_user_by_email(db, user_email)
 		if not existing_user:
-			import secrets
-			random_password = secrets.token_urlsafe(16)
+			import secrets as _secrets
+			random_password = _secrets.token_urlsafe(16)
+			from ..crud.user_crud import create_user
 			user_create = UserCreate(name=user_name, email=user_email, password=random_password)
 			create_user(db, user_create)
 	finally:
 		db.close()
 
-	# Redirect to frontend with only the shop parameter
-	# Use production frontend URL for redirect
-	frontend_url = "https://daily-snapshot.onrender.com"
-	redirect_url = f"{frontend_url}/?shop={shop}"
-	return redirect(redirect_url)
+	logger.info(f"Shopify OAuth successful for shop: {shop}")
+	return {'message': 'Shopify OAuth successful'}, 200

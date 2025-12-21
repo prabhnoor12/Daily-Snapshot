@@ -45,8 +45,26 @@ def handle_order_created(webhook_obj):
 	# ...business logic...
 
 def handle_app_uninstalled(webhook_obj):
-	logger.info(f"App uninstalled event: {webhook_obj.shop_domain}")
-	# ...business logic...
+	   logger.info(f"App uninstalled event: {webhook_obj.shop_domain}")
+	   # Clean up shop and user data on uninstall
+	   from ..database import SessionLocal
+	   from ..crud.shop_crud import get_shop, delete_shop
+	   from ..crud.user_crud import get_user_by_email, delete_user
+	   db = SessionLocal()
+	   try:
+		   shop = db.query(get_shop.__globals__['Shop']).filter_by(domain=webhook_obj.shop_domain).first()
+		   if shop:
+			   user = db.query(get_user_by_email.__globals__['User']).filter_by(email=shop.email).first()
+			   delete_shop(db, shop.id)
+			   if user:
+				   # Optionally, delete user if not used elsewhere
+				   db.delete(user)
+				   db.commit()
+			   logger.info(f"Deleted shop and user for domain: {webhook_obj.shop_domain}")
+		   else:
+			   logger.warning(f"Shop not found for uninstall: {webhook_obj.shop_domain}")
+	   finally:
+		   db.close()
 
 def handle_generic_event(webhook_obj):
 	logger.info(f"Generic event: {webhook_obj.event_type}")
