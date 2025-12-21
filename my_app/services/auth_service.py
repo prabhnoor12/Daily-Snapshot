@@ -161,7 +161,6 @@ def handle_shopify_callback(request_args, session):
 	finally:
 		db.close()
 
-
 	# Create a user for the shop owner if not already present
 	from ..crud.user_crud import get_user_by_email, create_user
 	from ..schemas.user_schema import UserCreate
@@ -171,7 +170,6 @@ def handle_shopify_callback(request_args, session):
 	try:
 		existing_user = get_user_by_email(db, user_email)
 		if not existing_user:
-			# Use a random password since Shopify does not provide one
 			import secrets
 			random_password = secrets.token_urlsafe(16)
 			user_create = UserCreate(name=user_name, email=user_email, password=random_password)
@@ -179,4 +177,8 @@ def handle_shopify_callback(request_args, session):
 	finally:
 		db.close()
 
-	return {'shop': shop, 'access_token': access_token, 'shop_info': shop_data}, 200
+	# Redirect to frontend with only the shop parameter
+	# Use production frontend URL for redirect
+	frontend_url = "https://daily-snapshot.onrender.com"
+	redirect_url = f"{frontend_url}/?shop={shop}"
+	return redirect(redirect_url)
